@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Department details</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="panel-heading" style="background-color:lightgray;text-align: center">
+    <h1 class="panel-title" th:text="${department.name}"></h1>
+</div>
+<br>
+<br>
+<br>
+
+<div class="panel-body">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+
+                <h2 class="panel-title" style="text-align: center">Doctors</h2>
+                <br>
+                <table class="table table-striped table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>ID</th>
+                        <th>Last name</th>
+                        <th>First name</th>
+                        <th>Details</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="doctor: ${department.doctors}">
+
+                        <td th:text="${doctor.id}"></td>
+                        <td th:text="${doctor.firstName}"></td>
+                        <td th:text="${doctor.lastName}"></td>
+                        <td>
+                            <a href="#" th:href="@{'/doctors/{id}'(id=${doctor.id})}">
+                                <button class="btn btn-secondary">Details</button>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+
+                <h2 class="panel-title" style="text-align: center">Patients</h2>
+                <br>
+                <table class="table table-striped table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>ID</th>
+                        <th>Last name</th>
+                        <th>First name</th>
+                        <th>Details</th>
+                    </tr>
+                    </thead>
+                    <tr th:each="patient: ${department.patients}">
+
+                        <td th:text="${patient.id}"></td>
+                        <td th:text="${patient.firstName}"></td>
+                        <td th:text="${patient.lastName}"></td>
+                        <td>
+                            <a href="#" th:href="@{'/patients/{id}'(id=${patient.id})}">
+                                <button class="btn btn-secondary">Details</button>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

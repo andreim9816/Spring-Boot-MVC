@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient details</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<body>
+
+<div class="container">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading" style="background-color:lightgray;">
+            <h1 class="panel-title">Details</h1>
+        </div>
+
+        <br>
+
+        <div class="panel-body">
+
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-2" style="text-align:center">
+                        <h3>Personal details</h3>
+                    </div>
+
+                    <div class="col-md-3" style="text-align:center">
+                        <h3>Address</h3>
+                    </div>
+
+                    <div class="col-md-7" style="text-align:center">
+                        <h3>Consults</h3>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-2">
+
+                        <div>
+                            <label>CNP:</label>
+                            <input type="text" disabled class="form-control" th:field="${patient.cnp}"/>
+                        </div>
+
+                        <div style="margin-top: 15px">
+                            <label>Last name:</label>
+                            <input type="text" disabled class="form-control" th:field="${patient.lastName}"/>
+                        </div>
+
+                        <div style="margin-top: 15px">
+                            <label>First name:</label>
+                            <input type="text" disabled class="form-control" th:field="${patient.firstName}"/>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-md-3">
+
+                        <div>
+                            <label>Street:</label>
+                            <input type="text" disabled class="form-control" th:field="${patient.address.street}"/>
+                        </div>
+
+                        <div style="margin-top: 15px">
+                            <label>Number:</label>
+                            <input type="number" disabled class="form-control" th:field="${patient.address.no}"/>
+                        </div>
+
+                        <div style="margin-top: 15px">
+                            <label>City:</label>
+                            <input type="text" disabled class="form-control" th:field="${patient.address.city}"/>
+                        </div>
+
+                    </div>
+
+                    <div class="col col-md-7">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-inverse">
+                            <tr>
+                                <th>ID</th>
+                                <th>Doctor</th>
+                                <th>Department</th>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="consult: ${patient.consults}">
+
+                                <td th:text="${consult.id}"></td>
+                                <td th:text="|${consult.doctor.lastName} ${consult.doctor.firstName}|"></td>
+                                <td th:text="${patient.department.name}"></td>
+                                <td th:text="${consult.date}"></td>
+                                <td>
+                                    <a class="btn btn-secondary" href="#"
+                                       th:href="@{'/consults/{id}'(id=${consult.id})}"
+                                       role="button">
+                                        Details
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-secondary" href="#"
+                                       th:href="@{'/consults/{id}/edit'(id=${consult.id})}"
+                                       role="button">
+                                        Edit
+                                    </a>
+                                </td>
+                                <td>
+                                    <form th:object="${patient}" th:action="@{'/consults/{id}'(id=${consult.id})}"
+                                          th:method="delete">
+                                        <button class="btn btn-secondary">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="col-form-label">Department</label>
+                        <input type="text" disabled class="form-control" th:field="${patient.department.name}"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--            <div class="row">-->
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>CNP:</label>-->
+            <!--                    <input type="text" disabled class="form-control" th:field="${patient.cnp}"/>-->
+            <!--                </div>-->
+
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>Street:</label>-->
+            <!--                    <input type="text" disabled class="form-control" th:field="${patient.address.street}"/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <!--            <div class="row">-->
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>Last name:</label>-->
+            <!--                    <input type="text" disabled class="form-control" th:field="${patient.lastName}"/>-->
+            <!--                </div>-->
+
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>Number:</label>-->
+            <!--                    <input type="number" disabled class="form-control" th:field="${patient.address.no}"/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <!--            <div class="row">-->
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>First name:</label>-->
+            <!--                    <input type="text" disabled class="form-control" th:field="${patient.firstName}"/>-->
+            <!--                </div>-->
+
+            <!--                <div class="col-md-3">-->
+            <!--                    <label>City:</label>-->
+            <!--                    <input type="text" disabled class="form-control" th:field="${patient.address.city}"/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <!--            <div class="col-md-3">-->
+            <!--                <label class="col-form-label">Department</label>-->
+            <!--                <input type="text" disabled class="form-control" th:field="${patient.department.name}"/>-->
+            <!--            </div>-->
+
+            <!--            <div class="row" style="text-align: center">-->
+
+            <!--                <div class="col-md-6" style="text-align: center">-->
+
+            <!--                    <h2 class="panel-title" style="text-align: center">Consults</h2>-->
+            <!--                    <table class="table table-striped table-hover">-->
+            <!--                        <thead class="thead-inverse">-->
+            <!--                        <tr>-->
+            <!--                            <th>ID</th>-->
+            <!--                            <th>Doctor</th>-->
+            <!--                            <th>Department</th>-->
+            <!--                            <th>Date</th>-->
+            <!--                            <th>Details</th>-->
+            <!--                            <th>Edit</th>-->
+            <!--                            <th>Delete</th>-->
+            <!--                        </tr>-->
+            <!--                        </thead>-->
+            <!--                        <tr th:each="consult: ${patient.consults}">-->
+
+            <!--                            <td th:text="${consult.id}"></td>-->
+            <!--                            <td th:text="${consult.doctor.lastName} ${consult.doctor.firstName}"></td>-->
+            <!--                            <td th:text="${patient.department.name}"></td>-->
+            <!--                            <td th:text="${consult.date}"></td>-->
+            <!--                            <td>-->
+            <!--                                <a class="btn btn-secondary" href="#" th:href="@{'/consults/{id}'(id=${consult.id})}"-->
+            <!--                                   role="button">-->
+            <!--                                    Details-->
+            <!--                                </a>-->
+            <!--                            </td>-->
+            <!--                            <td>-->
+            <!--                                <a class="btn btn-secondary" href="#"-->
+            <!--                                   th:href="@{'/consults/{id}/edit'(id=${consult.id})}"-->
+            <!--                                   role="button">-->
+            <!--                                    Edit-->
+            <!--                                </a>-->
+            <!--                            </td>-->
+            <!--                            <td>-->
+            <!--                                <form th:object="${patient}" th:action="@{'/consults/{id}'(id=${consult.id})}"-->
+            <!--                                      th:method="delete">-->
+            <!--                                    <button class="btn btn-secondary">Delete</button>-->
+            <!--                                </form>-->
+            <!--                            </td>-->
+            <!--                        </tr>-->
+            <!--                    </table>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>
