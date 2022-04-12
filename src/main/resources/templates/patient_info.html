@@ -92,7 +92,7 @@
                                 <td th:text="${consult.id}"></td>
                                 <td th:text="|${consult.doctor.lastName} ${consult.doctor.firstName}|"></td>
                                 <td th:text="${patient.department.name}"></td>
-                                <td th:text="${consult.date}"></td>
+                                <td th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></td>
                                 <td>
                                     <a class="btn btn-secondary" href="#"
                                        th:href="@{'/consults/{id}'(id=${consult.id})}"

@@ -11,7 +11,6 @@ import static com.example.project.model.Regex.NAME_REGEX;
 
 @Data
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Department {

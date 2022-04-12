@@ -61,22 +61,19 @@
                             </tr>
                             </thead>
                             <tr th:each="consult: ${doctor.consults}">
-
                                 <td th:text="${consult.id}"></td>
                                 <td th:text="|${consult.patient.lastName} ${consult.patient.firstName}|"></td>
                                 <td th:text="${doctor.department.name}"></td>
                                 <td th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></td>
                                 <td>
-                                    <a class="btn btn-secondary" href="#"
-                                       th:href="@{'/consults/{id}'(id=${consult.id})}"
-                                       role="button">
+                                    <a class="btn btn-secondary" th:href="@{'/consults/{id}'(id=${consult.id})}"
+                                       role="button" href="#">
                                         Details
                                     </a>
                                 </td>
                                 <td>
-                                    <a class="btn btn-secondary" href="#"
-                                       th:href="@{'/consults/{id}/edit'(id=${consult.id})}"
-                                       role="button">
+                                    <a class="btn btn-secondary" th:href="@{'/consults/{id}/edit'(id=${consult.id})}"
+                                       href="#" role="button">
                                         Edit
                                     </a>
                                 </td>

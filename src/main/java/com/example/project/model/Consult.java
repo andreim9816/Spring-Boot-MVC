@@ -1,6 +1,9 @@
 package com.example.project.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -8,7 +11,6 @@ import java.util.List;
 
 @Data
 @Entity
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Consult {
@@ -20,11 +22,11 @@ public class Consult {
 
     private Date date = new Date();
 
-    private String diagnose;
+    private String diagnose = "";
 
-    private String symptoms;
+    private String symptoms = "";
 
-    private String comment;
+    private String comment = "";
 
     @ManyToOne
     @JoinColumn(name = "FK_DOCTOR_ID")

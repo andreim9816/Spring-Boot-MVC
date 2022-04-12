@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consult details</title>
+
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css"
+          integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"/>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js"
+            integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<body>
+
+<div class="container">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading" style="background-color:lightgray;">
+            <h1 class="panel-title">Details</h1>
+        </div>
+
+        <br>
+
+        <div class="panel-body">
+
+            <div class="row col-md-8">
+                <div class="col-md-4">
+                    <label>Patient:</label>
+                    <p class="form-control" th:text="${patientName}"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Doctor:</label>
+                    <p class="form-control" th:text="${doctorName}"></p>
+                </div>
+
+                <div class="col-md-2">
+                    <label>Date:</label>
+                    <p class="form-control"
+                       th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></p>
+                </div>
+            </div>
+
+            <div class="row col-md-8">
+                <div class="col-md-6">
+                    <label>Symptoms:</label>
+                    <p class="form-control" th:text="${consult.symptoms}"></p>
+                </div>
+
+                <div class="col-md-4">
+                    <label>Diagnose:</label>
+                    <p class="form-control" th:text="${consult.diagnose}"></p>
+                </div>
+            </div>
+
+            <div class="row col-md-8">
+                <div class="col-md-10">
+                    <label>Comments:</label>
+                    <p class="form-control" th:text="${consult.comment}"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="container mt-10" style="padding: 0">
+                        <select class="selectpicker col-md-10" multiple aria-label="size 10 select example">
+                            <option disabled selected th:each="medication : ${medicationAll}"
+                                    th:value="${medication.id}"
+                                    th:utext="|${medication.name} ${medication.quantity}|"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

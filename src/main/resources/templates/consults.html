@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consults</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <table class="table table-striped table-hover ">
+        <thead class="thead-inverse">
+        <tr>
+            <th>ID</th>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Diagnose</th>
+            <th>Details</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tr th:each="consult: ${consults}">
+
+            <td th:text="${consult.id}"></td>
+            <td th:text="|${consult.patient.lastName} ${consult.patient.firstName}|"></td>
+            <td th:text="|${consult.doctor.lastName} ${consult.doctor.firstName}|"></td>
+            <td th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></td>
+            <td th:text="${consult.diagnose}"></td>
+            <td>
+                <a href="#" th:href="@{'/consults/{id}'(id=${consult.id})}">
+                    <button class="btn btn-secondary">Details</button>
+                </a>
+            </td>
+            <td>
+                <a class="btn btn-secondary" href="#" th:href="@{/consults/{id}/edit(id=${consult.id})}"
+                   role="button">
+                    Edit
+                </a>
+            </td>
+            <td>
+                <form th:object="${consult}" th:action="@{/consults/{id}(id=${consult.id})}"
+                      th:method="delete">
+                    <button class="btn btn-secondary">Delete</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-primary" role="button" th:href="@{'/consults/new'}" th:method="post">Add consult</a>
+        </div>
+        <!--        <div class="col-md-6">
+                    <a class="btn btn-primary" role="button" th:href="@{'/participant/new'}">register</a>
+                </div>
+        -->
+    </div>
+</div>
+</body>
+</html>

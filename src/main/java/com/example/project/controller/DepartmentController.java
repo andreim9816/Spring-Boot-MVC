@@ -4,8 +4,8 @@ import com.example.project.model.Department;
 import com.example.project.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/departments")
@@ -20,41 +20,46 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping
-    public String getAll(Model model) {
-        var departments = departmentService.getAllDepartments();
-        model.addAttribute("departments", departments);
-        return ALL_DEPARTMENTS;
+    public ModelAndView getAll() {
+        ModelAndView modelAndView = new ModelAndView(ALL_DEPARTMENTS);
+        modelAndView.addObject("departments", departmentService.getAllDepartments());
+        return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public String getById(@PathVariable("id") String departmentId, Model model) {
+    public ModelAndView getById(@PathVariable("id") String departmentId) {
+        ModelAndView modelAndView = new ModelAndView(VIEW_DEPARTMENT);
         var department = departmentService.getDepartmentById(Long.valueOf(departmentId));
-        model.addAttribute("department", department);
-        return VIEW_DEPARTMENT;
+        modelAndView.addObject("department", department);
+        return modelAndView;
     }
 
     @GetMapping("/new")
-    public String addDepartment(Model model) {
-        model.addAttribute("department", Department.builder().build());
-        return ADD_EDIT_DEPARTMENT;
+    public ModelAndView addDepartment() {
+        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_DEPARTMENT);
+        modelAndView.addObject("department", new Department());
+        return modelAndView;
     }
 
     @GetMapping("/{id}/edit")
-    public String editDepartment(@PathVariable("id") String departmentId, Model model) {
+    public ModelAndView editDepartment(@PathVariable("id") String departmentId) {
+        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_DEPARTMENT);
         var department = departmentService.getDepartmentById(Long.valueOf(departmentId));
-        model.addAttribute("department", department);
-        return ADD_EDIT_DEPARTMENT;
+        modelAndView.addObject("department", department);
+        return modelAndView;
     }
 
     @PostMapping
-    public String saveOrUpdateDepartment(@ModelAttribute Department department) {
+    public ModelAndView saveOrUpdateDepartment(@ModelAttribute Department department) {
+        ModelAndView modelAndView = new ModelAndView(REDIRECT + ALL_DEPARTMENTS);
         departmentService.saveDepartment(department);
-        return REDIRECT + ALL_DEPARTMENTS;
+        return modelAndView;
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDepartment(@PathVariable Long id) {
+    public ModelAndView deleteDepartment(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView(REDIRECT + ALL_DEPARTMENTS);
         departmentService.deleteDepartmentById(id);
-        return REDIRECT + ALL_DEPARTMENTS;
+        return modelAndView;
     }
 }
