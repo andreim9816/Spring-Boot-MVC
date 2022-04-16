@@ -4,56 +4,78 @@ import com.example.project.model.Department;
 import com.example.project.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/departments")
 @RequiredArgsConstructor
 public class DepartmentController {
+    public final static String REDIRECT = "redirect:/";
+    public final static String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult.";
 
     private final static String ALL_DEPARTMENTS = "departments";
     private final static String VIEW_DEPARTMENT = "department_info";
     private final static String ADD_EDIT_DEPARTMENT = "department_form";
-    public final static String REDIRECT = "redirect:/";
+
 
     private final DepartmentService departmentService;
 
-    @GetMapping
-    public ModelAndView getAll() {
-        ModelAndView modelAndView = new ModelAndView(ALL_DEPARTMENTS);
-        modelAndView.addObject("departments", departmentService.getAllDepartments());
-        return modelAndView;
+    @GetMapping(value = {"", "/", "/index"})
+    public String getAll(Model model) {
+        model.addAttribute("departments", departmentService.getAllDepartments());
+        return ALL_DEPARTMENTS;
     }
 
     @GetMapping("/{id}")
     public ModelAndView getById(@PathVariable("id") String departmentId) {
         ModelAndView modelAndView = new ModelAndView(VIEW_DEPARTMENT);
+
         var department = departmentService.getDepartmentById(Long.valueOf(departmentId));
         modelAndView.addObject("department", department);
+
         return modelAndView;
     }
 
     @GetMapping("/new")
-    public ModelAndView addDepartment() {
-        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_DEPARTMENT);
-        modelAndView.addObject("department", new Department());
-        return modelAndView;
+    public String addDepartment(Model model) {
+        if (!model.containsAttribute("department")) {
+            model.addAttribute("department", new Department());
+        }
+        return ADD_EDIT_DEPARTMENT;
     }
 
     @GetMapping("/{id}/edit")
-    public ModelAndView editDepartment(@PathVariable("id") String departmentId) {
-        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_DEPARTMENT);
+    public String editDepartment(@PathVariable("id") String departmentId, Model model) {
         var department = departmentService.getDepartmentById(Long.valueOf(departmentId));
-        modelAndView.addObject("department", department);
-        return modelAndView;
+
+        if (!model.containsAttribute("department")) {
+            model.addAttribute("department", department);
+        }
+
+        return ADD_EDIT_DEPARTMENT;
     }
 
     @PostMapping
-    public ModelAndView saveOrUpdateDepartment(@ModelAttribute Department department) {
-        ModelAndView modelAndView = new ModelAndView(REDIRECT + ALL_DEPARTMENTS);
+    public String saveOrUpdateDepartment(@ModelAttribute("department") @Valid Department department, BindingResult bindingResult, RedirectAttributes attr) {
+        if (bindingResult.hasErrors()) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "department", bindingResult);
+            attr.addFlashAttribute("department", department);
+
+            if (department.getId() != null) {
+                return REDIRECT + ALL_DEPARTMENTS + "/" + department.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_DEPARTMENTS + "/new";
+            }
+        }
         departmentService.saveDepartment(department);
-        return modelAndView;
+
+        return REDIRECT + ALL_DEPARTMENTS;
     }
 
     @DeleteMapping("/{id}")

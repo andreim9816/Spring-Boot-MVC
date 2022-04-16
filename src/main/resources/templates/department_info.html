@@ -8,6 +8,8 @@
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 </head>
 
+<div th:insert="navbar :: navbar">  </div>
+
 <body>
 <div class="panel-heading" style="background-color:lightgray;text-align: center">
     <h1 class="panel-title" th:text="${department.name}"></h1>

@@ -1,13 +1,17 @@
 package com.example.project.controller;
 
 import com.example.project.model.Medication;
-import com.example.project.service.DepartmentService;
 import com.example.project.service.MedicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
+import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
 import static com.example.project.controller.DepartmentController.REDIRECT;
 
 @Controller
@@ -37,7 +41,9 @@ public class MedicationController {
 
     @GetMapping("/new")
     public String addMedication(Model model) {
-        model.addAttribute("medication", new Medication());
+        if (!model.containsAttribute("medication")) {
+            model.addAttribute("medication", new Medication());
+        }
 
         return ADD_EDIT_MEDICATION;
     }
@@ -45,12 +51,27 @@ public class MedicationController {
     @GetMapping("/{id}/edit")
     public String editDepartment(@PathVariable("id") String medicationId, Model model) {
         var medication = medicationService.getMedicationById(Long.valueOf(medicationId));
-        model.addAttribute("medication", medication);
+
+        if (!model.containsAttribute("medication")) {
+            model.addAttribute("medication", medication);
+        }
+
         return ADD_EDIT_MEDICATION;
     }
 
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute Medication medication) {
+    public String saveOrUpdate(@ModelAttribute("medication") @Valid Medication medication, BindingResult bindingResult,
+                               RedirectAttributes attr) {
+        if (bindingResult.hasErrors()) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "medication", bindingResult);
+            attr.addFlashAttribute("medication", medication);
+
+            if (medication.getId() != null) {
+                return REDIRECT + ALL_MEDICATIONS + "/" + medication.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_MEDICATIONS + "/new";
+            }
+        }
         medicationService.saveMedication(medication);
         return REDIRECT + ALL_MEDICATIONS;
     }

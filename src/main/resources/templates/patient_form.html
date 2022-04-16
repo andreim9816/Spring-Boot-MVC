@@ -7,8 +7,11 @@
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <body>
 
-<form th:object="${patient}" th:action="@{/patients/}" method="post">
-    <input type="hidden" th:field="*{id}"/>
+<div th:insert="navbar :: navbar">  </div>
+
+<form th:action="@{/patients/}" method="post">
+    <input name="id" type="hidden" th:field="${patient.id}"/>
+    <input name="id" type="hidden" th:field="${address.id}"/>
     <div class="container">
 
         <div class="panel panel-primary">
@@ -33,43 +36,73 @@
                 <div class="row">
                     <div class="col-md-3">
                         <label>CNP:</label>
-                        <input type="text" class="form-control" th:field="*{cnp}" placeholder="CNP"/>
+                        <input type="text" name="cnp" class="form-control" th:value="${patient.cnp}" placeholder="CNP"/>
+                        <label th:if="${#fields.hasErrors('patient.cnp')}" th:errors="${patient.cnp}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
 
                     <div class="col-md-3" style="margin-left: 60px">
                         <label>Street:</label>
-                        <input type="text" class="form-control" th:field="*{address.street}" placeholder="Street"/>
+                        <input type="text" name="street" class="form-control" th:field="${address.street}"
+                               placeholder="Street"/>
+                        <label th:if="${#fields.hasErrors('address.street')}" th:errors="${address.street}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-3">
                         <label>Last name:</label>
-                        <input type="text" class="form-control" th:field="*{lastName}" placeholder="Last name"/>
+                        <input type="text" name="lastName" class="form-control" th:field="${patient.lastName}"
+                               placeholder="Last name"/>
+                        <label th:if="${#fields.hasErrors('patient.lastName')}" th:errors="${patient.lastName}"
+                               type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
 
                     <div class="col-md-3" style="margin-left: 60px">
                         <label>Number:</label>
-                        <input type="number" th:default="1" min="1" class="form-control" th:field="*{address.no}"
+                        <input type="number" name="no" min="1" class="form-control" th:value="${address.no}"
                                placeholder="Number"/>
+                        <label th:if="${#fields.hasErrors('patient.address.no')}" th:errors="${address.no}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-3">
                         <label>First name:</label>
-                        <input type="text" class="form-control" th:field="*{firstName}" placeholder="First name"/>
+                        <input type="text" name="firstName" class="form-control" th:field="${patient.firstName}"
+                               placeholder="First name"/>
+                        <label th:if="${#fields.hasErrors('patient.firstName')}" th:errors="${patient.firstName}"
+                               type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
 
                     <div class="col-md-3" style="margin-left: 60px">
                         <label>City:</label>
-                        <input type="text" class="form-control" th:field="*{address.city}" placeholder="City"/>
+                        <input type="text" name="city" class="form-control" th:field="${address.city}"
+                               placeholder="City"/>
+                        <label th:if="${#fields.hasErrors('address.city')}" th:errors="${address.city}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
                 <div class="form-group col-md-3" style="margin-top: 30px">
                     <label class="col-form-label">Department</label>
-                    <select class="form-control" th:field="*{department.id}">
+                    <select class="form-control" th:field="*{patient.department.id}">
                         <option th:each="dept : ${departmentAll}"
                                 th:value="${dept.id}"
                                 th:utext="${dept.name}">

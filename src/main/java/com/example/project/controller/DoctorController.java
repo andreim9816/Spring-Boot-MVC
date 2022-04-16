@@ -6,8 +6,13 @@ import com.example.project.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
+import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
 import static com.example.project.controller.DepartmentController.REDIRECT;
 
 @Controller
@@ -38,7 +43,9 @@ public class DoctorController {
 
     @GetMapping("/new")
     public String addDoctor(Model model) {
-        model.addAttribute("doctor", new Doctor());
+        if (!model.containsAttribute("doctor")) {
+            model.addAttribute("doctor", new Doctor());
+        }
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
 
         return ADD_EDIT_DOCTOR;
@@ -50,14 +57,28 @@ public class DoctorController {
         var doctor = doctorService.getById(Long.valueOf(doctorId));
         var departments = departmentService.getAllDepartments();
 
-        model.addAttribute("doctor", doctor);
+        if (!model.containsAttribute("doctor")) {
+            model.addAttribute("doctor", doctor);
+        }
         model.addAttribute("departmentAll", departments);
+
         return ADD_EDIT_DOCTOR;
     }
 
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute Doctor doctor) {
+    public String saveOrUpdate(@ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResult, RedirectAttributes attr) {
+        if (bindingResult.hasErrors()) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResult);
+            attr.addFlashAttribute("doctor", doctor);
+
+            if (doctor.getId() != null) {
+                return REDIRECT + ALL_DOCTORS + "/" + doctor.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_DOCTORS + "/new";
+            }
+        }
         doctorService.saveDoctor(doctor);
+
         return REDIRECT + ALL_DOCTORS;
     }
 

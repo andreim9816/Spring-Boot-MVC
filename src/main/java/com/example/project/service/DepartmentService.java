@@ -42,10 +42,10 @@ public class DepartmentService {
 
     public Department saveDepartment(Department department) {
 
-        Optional<Department> departmentByName = getDepartmentByName(department.getName());
-        if (departmentByName.isPresent()) {
-            throw new CustomException(String.format("Department with name %s already exists!", department.getName()));
-        }
+//        Optional<Department> departmentByName = getDepartmentByName(department.getName());
+//        if (departmentByName.isPresent()) {
+//            throw new CustomException(String.format("Department with name %s already exists!", department.getName()));
+//        }
 
         return departmentRepository.save(department);
     }

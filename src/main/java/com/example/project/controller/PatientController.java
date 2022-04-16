@@ -1,13 +1,20 @@
 package com.example.project.controller;
 
+import com.example.project.model.Address;
 import com.example.project.model.Patient;
+import com.example.project.service.AddressService;
 import com.example.project.service.DepartmentService;
 import com.example.project.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
+import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
 import static com.example.project.controller.DepartmentController.REDIRECT;
 
 @Controller
@@ -21,6 +28,7 @@ public class PatientController {
 
     private final PatientService patientService;
     private final DepartmentService departmentService;
+    private final AddressService addressService;
 
     @GetMapping
     public String getAll(Model model) {
@@ -38,26 +46,56 @@ public class PatientController {
 
     @GetMapping("/new")
     public String addPatient(Model model) {
-        model.addAttribute("patient", new Patient());
+        if (!model.containsAttribute("patient")) {
+            model.addAttribute("patient", new Patient());
+        }
+        if (!model.containsAttribute("address")) {
+            model.addAttribute("address", new Address());
+        }
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
 
-        return "patient_form";
+        return ADD_EDIT_PATIENT;
     }
 
     @GetMapping("/{id}/edit")
     public String editDepartment(@PathVariable("id") String patientId, Model model) {
-
         var patient = patientService.getPatientById(Long.valueOf(patientId));
         var departments = departmentService.getAllDepartments();
 
-        model.addAttribute("patient", patient);
+        if (!model.containsAttribute("patient")) {
+            model.addAttribute("patient", patient);
+        }
+        if (!model.containsAttribute("address")) {
+            model.addAttribute("address", patient.getAddress());
+        }
         model.addAttribute("departmentAll", departments);
-        return "patient_form";
+
+        return ADD_EDIT_PATIENT;
     }
 
     @PostMapping
-    public String saveOrUpdate(@ModelAttribute Patient patient) {
+    public String saveOrUpdate(@ModelAttribute("patient") @Valid Patient patient, BindingResult bindingResultPatient,
+                               @ModelAttribute("address") @Valid Address address, BindingResult bindingResultAddress,
+                               RedirectAttributes attr) {
+        if (bindingResultPatient.hasErrors() || bindingResultAddress.hasErrors()) {
+
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "patient", bindingResultPatient);
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "address", bindingResultAddress);
+            attr.addFlashAttribute("patient", patient);
+            attr.addFlashAttribute("address", address);
+
+            if (patient.getId() != null) {
+                return REDIRECT + ALL_PATIENTS + "/" + patient.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_PATIENTS + "/new";
+            }
+        }
+
+        address.setPatient(patient);
+        patient.setAddress(address);
         patientService.savePatient(patient);
+//        addressService.saveAddress(address);
+
         return REDIRECT + ALL_PATIENTS;
     }
 

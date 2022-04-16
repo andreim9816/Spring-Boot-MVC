@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>NavigationBar</title>
+
+</head>
+<body>
+
+<nav th:fragment="navbar" class="navbar navbar-expand-md bg-dark navbar-dark">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{/}">Manage consults!</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/index' ? 'active':''}"
+                   th:href="@{/departments}">Departments</a></li>
+
+            <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/patients' ? 'active':''}"
+                   th:href="@{/patients}">Patients</a></li>
+
+            <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/Doctors' ? 'active':''}"
+                   th:href="@{/doctors}">Doctors</a></li>
+
+            <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/consults' ? 'active':''}"
+                   th:href="@{/consults}">Consults</a></li>
+
+<!--            <div sec:authorize="hasRole('CUSTOMER')">-->
+<!--                <li><a class="nav-link"-->
+<!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/users/myProfile' ? 'active':''}"-->
+<!--                       th:href="@{/users/myProfile}">My profile</a></li>-->
+<!--            </div>-->
+<!--            <div sec:authorize="hasRole('CUSTOMER')">-->
+<!--                <li><a class="nav-link"-->
+<!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/bookings/myBookings' ? 'active':''}"-->
+<!--                       th:href="@{/bookings/myBookings}">My bookings</a></li>-->
+<!--            </div>-->
+
+<!--            <div sec:authorize="hasRole('ADMIN')">-->
+<!--                <li><a class="nav-link"-->
+<!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/users' ? 'active':''}"-->
+<!--                       th:href="@{/users}">Our users</a></li>-->
+<!--            </div>-->
+<!--            <div sec:authorize="hasRole('ADMIN')">-->
+<!--                <li><a class="nav-link"-->
+<!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/bookings' ? 'active':''}"-->
+<!--                       th:href="@{/bookings}">Our bookings</a></li>-->
+<!--            </div>-->
+
+<!--            <li>-->
+<!--                <form id="logoutform" th:action="@{/logout}" method="POST">-->
+<!--                    <a class="nav-link" href="#" onclick="document.getElementById('logoutform').submit()">Logout</a>-->
+<!--                </form>-->
+<!--            </li>-->
+
+
+        </ul>
+    </div>
+</nav>
+</body>
+</html>
