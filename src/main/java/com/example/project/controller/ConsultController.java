@@ -9,6 +9,7 @@ import com.example.project.service.ConsultService;
 import com.example.project.service.DoctorService;
 import com.example.project.service.MedicationService;
 import com.example.project.service.PatientService;
+import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,7 @@ public class ConsultController {
     private final DoctorService doctorService;
     private final MedicationService medicationService;
     private final PatientService patientService;
+    private final UserService userService;
 
     @GetMapping
     public String getAll(Model model) {
@@ -77,9 +79,9 @@ public class ConsultController {
         var medications = medicationService.getAllMedications();
         var doctors = doctorService.getAllDoctors();
         var patients = patientService.getAllPatients();
+        var consult = new Consult();
 
         if (!model.containsAttribute("consult")) {
-            var consult = new Consult();
             consult.setDoctor(new Doctor());
             consult.setPatient(new Patient());
             consult.setMedications(new ArrayList<>());
@@ -89,6 +91,11 @@ public class ConsultController {
         model.addAttribute("doctorAll", doctors);
         model.addAttribute("patientAll", patients);
         model.addAttribute("medicationAll", medications);
+
+        /* Doctors can add consults only on their behalf */
+        if (UserService.isLoggedIn() && userService.isDoctor()) {
+            consult.setDoctor(userService.getCurrentUser().getDoctor());
+        }
 
         return ADD_CONSULT;
     }
@@ -104,7 +111,7 @@ public class ConsultController {
             return new SelectedMedication(med, isContained);
         }).collect(Collectors.toList());
 
-        if(!model.containsAttribute("consult"))
+        if (!model.containsAttribute("consult"))
             model.addAttribute("consult", consult);
 
         model.addAttribute("doctorAll", doctors);

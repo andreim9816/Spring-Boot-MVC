@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -61,8 +61,8 @@
                                 <th>Department</th>
                                 <th>Date</th>
                                 <th>Details</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th sec:authorize="hasRole('ADMIN')">Edit</th>
+                                <th sec:authorize="hasRole('ADMIN')">Delete</th>
                             </tr>
                             </thead>
                             <tr th:each="consult: ${doctor.consults}">
@@ -76,13 +76,13 @@
                                         Details
                                     </a>
                                 </td>
-                                <td>
+                                <td sec:authorize="hasRole('ADMIN')">
                                     <a class="btn btn-secondary" th:href="@{'/consults/{id}/edit'(id=${consult.id})}"
                                        href="#" role="button">
                                         Edit
                                     </a>
                                 </td>
-                                <td>
+                                <td sec:authorize="hasRole('ADMIN')">
                                     <form th:object="${doctor}" th:action="@{'/consults/{id}'(id=${consult.id})}"
                                           th:method="delete">
                                         <button class="btn btn-secondary">Delete</button>

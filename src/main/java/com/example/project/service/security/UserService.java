@@ -1,24 +1,43 @@
 package com.example.project.service.security;
 
 import com.example.project.exception.EntityNotFoundException;
+import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
 import com.example.project.repository.security.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public User findByUsername(String username) {
+        Optional<User> userOpt = userRepository.findByUsername(username);
+        if (userOpt.isPresent()) {
+            return userOpt.get();
+        } else {
+            throw new UsernameNotFoundException("Username: " + username);
+        }
+    }
+
+    public boolean isDoctor() {
+        return getCurrentUser().getAuthorities().stream()
+                .map(Authority::getRole).collect(Collectors.toList()).contains(ROLE_DOCTOR);
+    }
+
+    public boolean isAdmin() {
+        return !isDoctor();
     }
 
     public User saveUser(User user) {
@@ -63,6 +82,18 @@ public class UserService {
             }
             return user.get();
         } else throw EntityNotFoundException.builder().entityId(null).entityType("User").build();
+    }
+
+    public static boolean isLoggedIn() {
+        try {
+            var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if (principal == null) {
+                return false;
+            }
+            return principal instanceof UserDetails;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 //    private void checkUniqueEmail(String email) {

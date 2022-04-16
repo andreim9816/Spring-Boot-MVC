@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Doctors</title>
@@ -19,8 +19,8 @@
             <th>Last name</th>
             <th>Department</th>
             <th>Details</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th sec:authorize="hasRole('ADMIN')">Edit</th>
+            <th sec:authorize="hasRole('ADMIN')">Delete</th>
         </tr>
         </thead>
         <tr th:each="doctor: ${doctors}">
@@ -34,30 +34,19 @@
                     <button class="btn btn-secondary">Details</button>
                 </a>
             </td>
-            <td>
+            <td sec:authorize="hasRole('ADMIN')">
                 <a class="btn btn-secondary" href="#" th:href="@{/doctors/{id}/edit(id=${doctor.id})}"
                    role="button">
                     Edit
                 </a>
             </td>
-            <td>
+            <td sec:authorize="hasRole('ADMIN')">
                 <form th:object="${doctor}" th:action="@{/doctors/{id}(id=${doctor.id})}" th:method="delete">
                     <button class="btn btn-secondary">Delete</button>
                 </form>
             </td>
         </tr>
     </table>
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <a class="btn btn-primary" role="button" th:href="@{'/doctors/new'}" th:method="post">Add doctor</a>
-        </div>
-        <!--        <div class="col-md-6">
-                    <a class="btn btn-primary" role="button" th:href="@{'/participant/new'}">register</a>
-                </div>
-        -->
-    </div>
 </div>
 </body>
 </html>

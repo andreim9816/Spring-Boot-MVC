@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Consult details</title>
@@ -26,10 +26,13 @@
 
 <body>
 
-<div th:insert="navbar :: navbar">  </div>
+<div th:insert="navbar :: navbar"></div>
 
 <form th:object="${consult}" th:action="@{/consults/}" method="post">
     <input type="hidden" th:field="*{id}"/>
+    <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.id}"/>
+    <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.firstName}"/>
+    <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.lastName}"/>
     <div class="container">
 
         <div class="panel panel-primary">
@@ -62,18 +65,29 @@
 
                     <div class="col-md-4">
                         <label class="col-form-label">Doctor:</label>
-                        <select class="form-control" th:field="*{doctor.id}">
-                            <option th:each="doctor : ${doctorAll}"
-                                    th:value="${doctor.id}"
-                                    th:utext="|${doctor.lastName} ${doctor.firstName}|">
-                            </option>
-                        </select>
+                        <div sec:authorize="hasRole('DOCTOR')">
+                            <p class="form-control" th:field="*{doctor.id}"
+                               th:text="|${consult.doctor.lastName} ${consult.doctor.firstName}|"></p>
+                        </div>
+
+                        <div sec:authorize="hasRole('ADMIN')">
+                            <select class="form-control" th:field="*{doctor.id}">
+                                <option th:each="doctor : ${doctorAll}"
+                                        th:value="${doctor.id}"
+                                        th:utext="|${doctor.lastName} ${doctor.firstName}|">
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-2">
                         <label>Date:</label>
                         <input class="form-control" name="date" type="date" style="margin-top:13px" th:field="*{date}"
                                th:value="${T(com.example.project.service.Helper).formatDate(consult.date)}"/>
+                        <label th:if="${#fields.hasErrors('date')}" th:errors="*{date}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                         <!--                    TODO calendar-->
                     </div>
                 </div>
@@ -82,11 +96,19 @@
                     <div class="col-md-6">
                         <label>Symptoms:</label>
                         <input type="text" class="form-control" th:field="*{symptoms}" placeholder="Symptoms"/>
+                        <label th:if="${#fields.hasErrors('symptoms')}" th:errors="*{symptoms}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
 
                     <div class="col-md-4">
                         <label>Diagnose:</label>
                         <input type="text" class="form-control" th:field="*{diagnose}" placeholder="Diagnose"/>
+                        <label th:if="${#fields.hasErrors('diagnose')}" th:errors="*{diagnose}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
@@ -94,6 +116,10 @@
                     <div class="col-md-10">
                         <label>Comments:</label>
                         <input type="text" class="form-control" th:field="*{comment}" placeholder="Comments"/>
+                        <label th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
@@ -109,7 +135,7 @@
                                         th:field="*{medications}"
                                         th:value="${medication.id}"
                                         th:utext="|${medication.name} ${medication.quantity}|"
-                                        th:selected="${arrays.contains(consult.medications, medication.id)}">
+                                        th:selected="${#arrays.contains(consult.medications, medication)}">
                                 </option>
 
                                 <!--                                <option th:each="medication : ${medicationAll}"-->

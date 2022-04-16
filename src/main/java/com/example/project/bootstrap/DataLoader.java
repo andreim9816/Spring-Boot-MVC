@@ -1,11 +1,13 @@
 package com.example.project.bootstrap;
 
+import com.example.project.model.Doctor;
 import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
-import com.example.project.repository.DoctorRepository;
 import com.example.project.repository.security.AuthorityRepository;
 import com.example.project.repository.security.UserRepository;
-import lombok.AllArgsConstructor;
+import com.example.project.service.DoctorService;
+import com.example.project.service.security.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -13,14 +15,15 @@ import org.springframework.stereotype.Component;
 import static com.example.project.configuration.SecurityConfig.ROLE_ADMIN;
 import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private AuthorityRepository authorityRepository;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private DoctorRepository doctorRepository;
+    private final AuthorityRepository authorityRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final DoctorService doctorService;
 
     private void loadUserData() {
         if (userRepository.count() == 0) {
@@ -33,15 +36,18 @@ public class DataLoader implements CommandLineRunner {
                     .authority(adminRole)
                     .build();
 
+            Doctor doctorWithId1 = doctorService.getById(1L);
             User doctor = User.builder()
                     .username("doctor_1")
                     .password(passwordEncoder.encode("12345"))
-                    .doctor(doctorRepository.getById(1L))
+                    .doctor(doctorWithId1)
                     .authority(doctorRole)
                     .build();
 
+            doctorWithId1.setUser(doctor);
             userRepository.save(admin);
             userRepository.save(doctor);
+            doctorService.saveDoctor(doctorWithId1);
         }
     }
 

@@ -28,14 +28,14 @@ insert into doctor(doctor_id, first_name, last_name, fk_department_id) values (6
 
 -- medications
 
-insert into medication(medication_id, name, quantity) values(1, 'Paracetamol', 400);
-insert into medication(medication_id, name, quantity) values(2, 'Paracetamol', 800);
-insert into medication(medication_id, name, quantity) values(3, 'Paracetamol', 1000);
-insert into medication(medication_id, name, quantity) values(4, 'Ibuprofen', 500);
-insert into medication(medication_id, name, quantity) values(5, 'Ibuprofen', 1000);
-insert into medication(medication_id, name, quantity) values(6, 'Diazepam', 400);
-insert into medication(medication_id, name, quantity) values(7, 'Vitamnia C', 1000);
-insert into medication(medication_id, name, quantity) values(8, 'Controloc', 400);
+insert into medication(medication_id, name, quantity) values(1, 'Controloc', 400);
+insert into medication(medication_id, name, quantity) values(2, 'Diazepam', 400);
+insert into medication(medication_id, name, quantity) values(3, 'Ibuprofen', 500);
+insert into medication(medication_id, name, quantity) values(4, 'Ibuprofen', 1000);
+insert into medication(medication_id, name, quantity) values(5, 'Paracetamol', 400);
+insert into medication(medication_id, name, quantity) values(6, 'Paracetamol', 800);
+insert into medication(medication_id, name, quantity) values(7, 'Paracetamol', 1000);
+insert into medication(medication_id, name, quantity) values(8, 'Vitamnia C', 1000);
 
 -- consults
 insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(1,TO_DATE('5-04-2022', 'DD-MM-YYYY'), '-', 'Durere de cap, febra', '-', 1, 1);

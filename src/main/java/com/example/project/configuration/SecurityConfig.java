@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Profile("h2")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public static final String ROLE_ADMIN = "admin";
-    public static final String ROLE_DOCTOR = "doctor";
+    public static final String ROLE_ADMIN = "ADMIN";
+    public static final String ROLE_DOCTOR = "DOCTOR";
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/departments").permitAll()
 
                 .antMatchers("/patients/new", "/patients/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
-                .antMatchers("/patients/{^[0-9]+}").permitAll()
-                .antMatchers("/patients").permitAll()
+                .antMatchers("/patients/{^[0-9]+}").hasAnyRole(ROLE_ADMIN, ROLE_DOCTOR)
+                .antMatchers("/patients").hasAnyRole(ROLE_ADMIN, ROLE_DOCTOR)
 
                 .antMatchers("/doctors/new", "/doctors/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
                 .antMatchers("/doctors/{^[0-9]+}").permitAll()
@@ -57,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/medications/{^[0-9]+}").permitAll()
                 .antMatchers("/medications").permitAll()
 
-                .antMatchers("/consults/new", "/consults/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
+                .antMatchers("/consults/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
+                .antMatchers("/consults/new").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
                 .antMatchers("/consults/{^[0-9]+}").permitAll()
                 .antMatchers("/consults").permitAll()
 

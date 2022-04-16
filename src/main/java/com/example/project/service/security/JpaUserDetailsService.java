@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,19 +22,11 @@ import java.util.stream.Collectors;
 @Slf4j
 public class JpaUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user;
-
-        Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent()) {
-            user = userOpt.get();
-        } else {
-            throw new UsernameNotFoundException("Username: " + username);
-        }
-        log.info(user.toString());
+        User user = userService.findByUsername(username);
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), user.getEnabled(), user.getAccountNotExpired(),
