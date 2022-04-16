@@ -56,3 +56,12 @@ insert into prescription(consult_id, medication_id) values(3, 2);
 insert into prescription(consult_id, medication_id) values(3, 8);
 insert into prescription(consult_id, medication_id) values(4, 1);
 insert into prescription(consult_id, medication_id) values(4, 8);
+
+-- authorities
+
+-- insert into authority(id, role) values(1, 'ADMIN');
+-- insert into authority(id, role) values(2, 'DOCTOR');
+--
+-- users
+-- insert into user(id, username, password, enabled, FK_DOCTOR_ID) values(1, 'admin_1', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 1, null);
+-- insert into user(id, username, password, enabled, FK_DOCTOR_ID) values(2, 'doctor_1', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 1, 1);

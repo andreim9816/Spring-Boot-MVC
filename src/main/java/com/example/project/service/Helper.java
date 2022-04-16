@@ -9,10 +9,10 @@ import java.util.Date;
 public class Helper {
 
     public final static String DATE_PATTERN = "dd-MM-yyyy";
-    public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_PATTERN);
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_PATTERN);
 
     public static String formatDate(Date date) {
-        return simpleDateFormat.format(date);
+        return SIMPLE_DATE_FORMAT.format(date);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.project.model;
 
+import com.example.project.model.security.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -28,4 +29,8 @@ public class Doctor extends Person {
     @ManyToOne
     @JoinColumn(name = "FK_DEPARTMENT_ID")
     private Department department;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "FK_USER_ID")
+    private User user;
 }

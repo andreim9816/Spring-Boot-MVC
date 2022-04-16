@@ -4,6 +4,7 @@ import com.example.project.model.Consult;
 import com.example.project.model.Doctor;
 import com.example.project.model.Medication;
 import com.example.project.model.Patient;
+import com.example.project.model.dto.SelectedMedication;
 import com.example.project.service.ConsultService;
 import com.example.project.service.DoctorService;
 import com.example.project.service.MedicationService;
@@ -11,13 +12,17 @@ import com.example.project.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
+import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
 import static com.example.project.controller.DepartmentController.REDIRECT;
 
 @Controller
@@ -27,7 +32,8 @@ public class ConsultController {
 
     private final static String ALL_CONSULTS = "consults";
     private final static String VIEW_CONSULT = "consult_info";
-    private final static String ADD_EDIT_CONSULT = "consult_form";
+    private final static String EDIT_CONSULT = "consult_form_edit";
+    private final static String ADD_CONSULT = "consult_form_new";
 
     private final ConsultService consultService;
     private final DoctorService doctorService;
@@ -46,6 +52,7 @@ public class ConsultController {
         ModelAndView modelAndView = new ModelAndView(VIEW_CONSULT);
 
         var consult = consultService.getConsultById(Long.valueOf(consultId));
+        var selectedMedicationIds = consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
         var medications = consult.getMedications().stream()
                 .sorted(Comparator.comparing(Medication::getName).thenComparing(Medication::getQuantity))
                 .collect(Collectors.toList());
@@ -59,56 +66,70 @@ public class ConsultController {
         modelAndView.addObject("doctorName", doctorName);
         modelAndView.addObject("patientName", patientName);
         modelAndView.addObject("medicationAll", medications);
-
-        return modelAndView;
-    }
-
-    @GetMapping("/new")
-    public ModelAndView addConsult() {
-        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_CONSULT);
-
-        var medications = medicationService.getAllMedications();
-        var doctors = doctorService.getAllDoctors();
-        var patients = patientService.getAllPatients();
-
-        var consult = new Consult();
-        consult.setDoctor(new Doctor());
-        consult.setPatient(new Patient());
-
-        modelAndView.addObject("consult", consult);
-        modelAndView.addObject("doctorAll", doctors);
-        modelAndView.addObject("patientAll", patients);
-        modelAndView.addObject("medicationAll", medications);
-        modelAndView.addObject("selectedPatientId", -1L);
-        modelAndView.addObject("selectedDoctorId", -1L);
-        modelAndView.addObject("selectedMedicationIds", new ArrayList<>());
-
-        return modelAndView;
-    }
-
-    @GetMapping("/{id}/edit")
-    public ModelAndView editConsult(@PathVariable("id") String consultId) {
-        ModelAndView modelAndView = new ModelAndView(ADD_EDIT_CONSULT);
-
-        var consult = consultService.getConsultById(Long.valueOf(consultId));
-        var medications = medicationService.getAllMedications();
-        var doctors = doctorService.getAllDoctors();
-        var patients = patientService.getAllPatients();
-        var selectedMedicationIds = consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
-
-        modelAndView.addObject("consult", consult);
-        modelAndView.addObject("doctorAll", doctors);
-        modelAndView.addObject("patientAll", patients);
-        modelAndView.addObject("medicationAll", medications);
-        modelAndView.addObject("selectedPatientId", consult.getPatient().getId());
-        modelAndView.addObject("selectedDoctorId", consult.getDoctor().getId());
         modelAndView.addObject("selectedMedicationIds", selectedMedicationIds);
 
         return modelAndView;
     }
 
+    @GetMapping("/new")
+    public String addConsult(Model model) {
+
+        var medications = medicationService.getAllMedications();
+        var doctors = doctorService.getAllDoctors();
+        var patients = patientService.getAllPatients();
+
+        if (!model.containsAttribute("consult")) {
+            var consult = new Consult();
+            consult.setDoctor(new Doctor());
+            consult.setPatient(new Patient());
+            consult.setMedications(new ArrayList<>());
+            model.addAttribute("consult", consult);
+        }
+
+        model.addAttribute("doctorAll", doctors);
+        model.addAttribute("patientAll", patients);
+        model.addAttribute("medicationAll", medications);
+
+        return ADD_CONSULT;
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editConsult(@PathVariable("id") String consultId, Model model) {
+        var consult = consultService.getConsultById(Long.valueOf(consultId));
+        var currentMedications = consult.getMedications();
+        var doctors = doctorService.getAllDoctors();
+        var patients = patientService.getAllPatients();
+        var selectedMedications = medicationService.getAllMedications().stream().map(med -> {
+            var isContained = currentMedications.contains(med);
+            return new SelectedMedication(med, isContained);
+        }).collect(Collectors.toList());
+
+        if(!model.containsAttribute("consult"))
+            model.addAttribute("consult", consult);
+
+        model.addAttribute("doctorAll", doctors);
+        model.addAttribute("patientAll", patients);
+//        model.addAttribute("medicationAll", medications);
+        model.addAttribute("selectedMedications", selectedMedications);
+
+        return EDIT_CONSULT;
+    }
+
     @PostMapping
-    public String saveOrUpdateConsult(@ModelAttribute Consult consult) {
+    public String saveOrUpdateConsult(@ModelAttribute("consult") @Valid Consult consult, BindingResult bindingResult, RedirectAttributes attr) {
+        if (bindingResult.hasErrors()) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "consult", bindingResult);
+            attr.addFlashAttribute("consult", consult);
+//            attr.addFlashAttribute("selectedMedicationIds", consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList()));
+//            attr.addFlashAttribute("selectedDoctorId", consult.getDoctor().getId());
+//            attr.addFlashAttribute("selectedPatientId", consult.getPatient().getId());
+
+            if (consult.getId() != null) {
+                return REDIRECT + ALL_CONSULTS + "/" + consult.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_CONSULTS + "/new";
+            }
+        }
         consultService.saveConsult(consult);
         return REDIRECT + ALL_CONSULTS;
     }
@@ -118,4 +139,9 @@ public class ConsultController {
         consultService.deleteConsultById(id);
         return REDIRECT + ALL_CONSULTS;
     }
+
+//    @InitBinder
+//    public void initBinder(WebDataBinder binder) {
+//        binder.registerCustomEditor(Date.class, new CustomDateEditor(SIMPLE_DATE_FORMAT, true));
+//    }
 }

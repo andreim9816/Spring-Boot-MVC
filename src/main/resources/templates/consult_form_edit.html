@@ -26,6 +26,8 @@
 
 <body>
 
+<div th:insert="navbar :: navbar">  </div>
+
 <form th:object="${consult}" th:action="@{/consults/}" method="post">
     <input type="hidden" th:field="*{id}"/>
     <div class="container">
@@ -68,12 +70,12 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2">
-                        <label>Date:</label>
-                        <p class="form-control" style="margin-top:13px"
-                           th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></p>
-                        <!--                    TODO calendar-->
-                    </div>
+<!--                    <div class="col-md-2">-->
+<!--                        <label>Date:</label>-->
+<!--                        <input class="form-control" name="date" type="date" style="margin-top:13px" th:field="*{date}"-->
+<!--                               th:value="${T(com.example.project.service.Helper).formatDate(consult.date)}"/>-->
+<!--                                            TODO calendar-->
+<!--                    </div>-->
                 </div>
 
                 <div class="row col-md-8">
@@ -100,33 +102,38 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="container mt-10" style="padding: 0">
-                            <select class="selectpicker col-md-10" multiple aria-label="size 10 select example"
-                            th:field="*{medications}">
-                                <option th:each="medication : ${medicationAll}"
-                                        th:value="${medication.id}"
-                                        th:utext="|${medication.name} ${medication.quantity}|"
-                                        th:if="${selectedMedicationIds.contains(__${medication.id}__)}" selected>
-                                </option>
 
-                                <option th:each="medication : ${medicationAll}"
-                                        th:value="${medication.id}"
-                                        th:utext="|${medication.name} ${medication.quantity}|"
-                                        th:unless="${selectedMedicationIds.contains(__${medication.id}__)}">
-                                </option>
-                            </select>
+                            <ul id ="medications"  style="list-style: none;" class="pl-0">
+                                <li th:each="selectedMedication: ${selectedMedications}" >
+                                    <input type="checkbox"
+                                           th:field="*{medications}"
+                                           th:checked="${selectedMedication.present}"
+                                           th:value="${selectedMedication.medication.id}"  />
+                                    <label
+                                            th:for="${#ids.prev('medications')}"
+                                            th:text="${selectedMedication.medication.name} + ' ' + ${selectedMedication.medication.quantity}">
+                                    </label>
+                                </li>
+                            </ul>
+
+<!--                            <ul id="medications" style="list-style: none">-->
+<!--                                <li th:each="selectedMedication : ${selectedMedications}">-->
+<!--                                    <input type="checkbox"-->
+<!--                                           th:field="*{medications}"-->
+<!--                                           th:selected="selectedMedication.isPresent"-->
+<!--                                           th:value="${selectedMedication.medication.id}"-->
+<!--                                    />-->
+<!--                                    <label-->
+<!--                                            th:for="${#ids.prev('medications')}"-->
+<!--                                            th:text="${selectedMedication.medication.name} + ' ' + ${selectedMedication.medication.quantity}">-->
+<!--                                    </label>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+
                         </div>
                     </div>
                 </div>
-
-                <!--                            <option-->
-                <!--                                    th:each="patient : ${patientAll}"-->
-                <!--                                    th:value="${patient.id}"-->
-                <!--                                    th:utext="|${patient.lastName} ${patient.firstName}|"-->
-                <!--                                    th:if="${patient.id != selectedPatientId}">-->
-                <!--                                th:if="${patient.id == selectedPatientId}"-->
-
                 <br>
-
                 <div class="row">
                     <div class="col-md-12 ml-md-auto" style="margin-top:10px">
                         <button type="submit" class="btn btn-primary">Submit</button>

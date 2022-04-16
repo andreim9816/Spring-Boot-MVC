@@ -3,6 +3,7 @@ package com.example.project.controller;
 import com.example.project.model.Department;
 import com.example.project.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,7 +20,7 @@ public class DepartmentController {
     public final static String REDIRECT = "redirect:/";
     public final static String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult.";
 
-    private final static String ALL_DEPARTMENTS = "departments";
+    public final static String ALL_DEPARTMENTS = "departments";
     private final static String VIEW_DEPARTMENT = "department_info";
     private final static String ADD_EDIT_DEPARTMENT = "department_form";
 
