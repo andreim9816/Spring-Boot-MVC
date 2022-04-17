@@ -28,11 +28,10 @@ public class Medication {
     @Min(value = 1, message = "Quantity must be positive!")
     private Integer quantity;
 
-    @ManyToMany(mappedBy = "medications")
+    @ManyToMany(mappedBy = "medications", fetch = FetchType.EAGER)
 //    @JoinTable(name = "Prescription",
 //            joinColumns = @JoinColumn(name = "MEDICATION_ID"),
 //            inverseJoinColumns = @JoinColumn(name = "CONSULT_ID"))
-
     @ToString.Exclude
     private List<Consult> consults;
 

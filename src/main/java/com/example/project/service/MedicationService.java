@@ -41,6 +41,9 @@ public class MedicationService {
         return medicationRepository.save(medication);
     }
 
+    public List<Medication> findMedicationsByIdContains(List<Long> ids) {
+        return medicationRepository.findMedicationsByIdContains(ids);
+    }
 
     public void deleteMedicationById(Long id) {
         medicationRepository.deleteById(id);

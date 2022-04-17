@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Consult details</title>
-
+    <title>Customer Info</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css"/>
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
-
+</head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet"
@@ -26,7 +25,7 @@
 
 <body>
 
-<div th:insert="navbar :: navbar">  </div>
+<div th:insert="navbar :: navbar"></div>
 
 <form th:object="${consult}" th:action="@{/consults/}" method="post">
     <input type="hidden" th:field="*{id}"/>
@@ -50,13 +49,6 @@
                                     th:value="${patient.id}"
                                     th:utext="|${patient.lastName} ${patient.firstName}|">
                             </option>
-                            <!--                            <option-->
-                            <!--                                    th:each="patient : ${patientAll}"-->
-                            <!--                                    th:value="${patient.id}"-->
-                            <!--                                    th:utext="|${patient.lastName} ${patient.firstName}|"-->
-                            <!--                                    th:if="${patient.id != selectedPatientId}">-->
-                            <!--                                th:if="${patient.id == selectedPatientId}"-->
-                            </option>
                         </select>
                     </div>
 
@@ -70,23 +62,34 @@
                         </select>
                     </div>
 
-<!--                    <div class="col-md-2">-->
-<!--                        <label>Date:</label>-->
-<!--                        <input class="form-control" name="date" type="date" style="margin-top:13px" th:field="*{date}"-->
-<!--                               th:value="${T(com.example.project.service.Helper).formatDate(consult.date)}"/>-->
-<!--                                            TODO calendar-->
-<!--                    </div>-->
+                    <div class="col-md-2">
+                        <label>Date:</label>
+                        <input class="form-control" name="date" type="date" style="margin-top:13px" th:field="*{date}"
+                               th:value="${T(com.example.project.service.Helper).formatDate(consult.date)}"/>
+                        <label th:if="${#fields.hasErrors('date')}" th:errors="*{date}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
+                    </div>
                 </div>
 
                 <div class="row col-md-8">
                     <div class="col-md-6">
                         <label>Symptoms:</label>
                         <input type="text" class="form-control" th:field="*{symptoms}" placeholder="Symptoms"/>
+                        <label th:if="${#fields.hasErrors('symptoms')}" th:errors="*{symptoms}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
 
                     <div class="col-md-4">
                         <label>Diagnose:</label>
                         <input type="text" class="form-control" th:field="*{diagnose}" placeholder="Diagnose"/>
+                        <label th:if="${#fields.hasErrors('diagnose')}" th:errors="*{diagnose}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
@@ -94,42 +97,29 @@
                     <div class="col-md-10">
                         <label>Comments:</label>
                         <input type="text" class="form-control" th:field="*{comment}" placeholder="Comments"/>
+                        <label th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" type="error"
+                               class="error text-danger">
+                            Error
+                        </label>
                     </div>
                 </div>
 
                 <br>
 
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8 form-group">
                         <div class="container mt-10" style="padding: 0">
 
-                            <ul id ="medications"  style="list-style: none;" class="pl-0">
-                                <li th:each="selectedMedication: ${selectedMedications}" >
-                                    <input type="checkbox"
-                                           th:field="*{medications}"
-                                           th:checked="${selectedMedication.present}"
-                                           th:value="${selectedMedication.medication.id}"  />
-                                    <label
-                                            th:for="${#ids.prev('medications')}"
-                                            th:text="${selectedMedication.medication.name} + ' ' + ${selectedMedication.medication.quantity}">
-                                    </label>
-                                </li>
-                            </ul>
-
-<!--                            <ul id="medications" style="list-style: none">-->
-<!--                                <li th:each="selectedMedication : ${selectedMedications}">-->
-<!--                                    <input type="checkbox"-->
-<!--                                           th:field="*{medications}"-->
-<!--                                           th:selected="selectedMedication.isPresent"-->
-<!--                                           th:value="${selectedMedication.medication.id}"-->
-<!--                                    />-->
-<!--                                    <label-->
-<!--                                            th:for="${#ids.prev('medications')}"-->
-<!--                                            th:text="${selectedMedication.medication.name} + ' ' + ${selectedMedication.medication.quantity}">-->
-<!--                                    </label>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-
+                            <select id="medications" th:name="medications" class="selectpicker col-md-10" multiple
+                                    aria-label="size 10 select example">
+                                <option th:each="selectedMed: ${selectedMedications}" th:name="medications"
+                                        th:field="*{medications}"
+                                        th:utext="|${selectedMed.medication.name} ${selectedMed.medication.quantity}|"
+                                        th:checked="${selectedMed.present}"
+                                        th:value="${selectedMed.medication.id}"
+                                        th:selected="${selectedMed.present}">
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>

@@ -26,7 +26,7 @@ public class Consult {
 
     @NotNull(message = "Date must be provided!")
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat( pattern = Helper.DATE_PATTERN)
+    @DateTimeFormat(iso=DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
     private Date date = new Date();
 
     @Length(min = 1, message = "Please enter at least 10 characters!")
@@ -48,10 +48,10 @@ public class Consult {
     @ToString.Exclude
     private Patient patient;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @ToString.Exclude
     @JoinTable(name = "Prescription",
-            joinColumns = @JoinColumn(name = "CONSULT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "MEDICATION_ID"))
+            joinColumns = @JoinColumn(name = "CONSULT_ID", referencedColumnName = "CONSULT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "MEDICATION_ID", referencedColumnName = "MEDICATION_ID"))
     private List<Medication> medications;
 }

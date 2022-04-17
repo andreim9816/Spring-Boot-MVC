@@ -33,6 +33,8 @@
     <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.id}"/>
     <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.firstName}"/>
     <input sec:authorize="hasRole('DOCTOR')" type="hidden" th:field="*{doctor.lastName}"/>
+    <input th:each="med : *{medications}" type="hidden"
+            th:value="${med.id}">
     <div class="container">
 
         <div class="panel panel-primary">
@@ -88,7 +90,6 @@
                                class="error text-danger">
                             Error
                         </label>
-                        <!--                    TODO calendar-->
                     </div>
                 </div>
 
@@ -129,8 +130,7 @@
                     <div class="col-md-8">
                         <div class="container mt-10" style="padding: 0">
                             <select name="medications" class="selectpicker col-md-10" multiple
-                                    aria-label="size 10 select example"
-                            >
+                                    aria-label="size 10 select example">
                                 <option th:each="medication : ${medicationAll}"
                                         th:field="*{medications}"
                                         th:value="${medication.id}"

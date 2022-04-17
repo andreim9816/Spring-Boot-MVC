@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
@@ -33,8 +34,7 @@ public class ConsultController {
 
     private final static String ALL_CONSULTS = "consults";
     private final static String VIEW_CONSULT = "consult_info";
-    private final static String EDIT_CONSULT = "consult_form_edit";
-    private final static String ADD_CONSULT = "consult_form_new";
+    private final static String EDIT_CONSULT = "consult_form";
 
     private final ConsultService consultService;
     private final DoctorService doctorService;
@@ -75,8 +75,7 @@ public class ConsultController {
 
     @GetMapping("/new")
     public String addConsult(Model model) {
-
-        var medications = medicationService.getAllMedications();
+        List<SelectedMedication> selectedMedications;
         var doctors = doctorService.getAllDoctors();
         var patients = patientService.getAllPatients();
         var consult = new Consult();
@@ -85,39 +84,62 @@ public class ConsultController {
             consult.setDoctor(new Doctor());
             consult.setPatient(new Patient());
             consult.setMedications(new ArrayList<>());
+            selectedMedications = medicationService.getAllMedications().stream()
+                    .map(med -> new SelectedMedication(med, false))
+                    .collect(Collectors.toList());
             model.addAttribute("consult", consult);
+        } else {
+            consult = (Consult) model.getAttribute("consult");
+            var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
+            selectedMedications = medicationService.getAllMedications().stream()
+                    .map(med -> {
+                        var isContained = containedMedicationIds.contains(med.getId());
+                        return new SelectedMedication(med, isContained);
+                    }).collect(Collectors.toList());
+            consult.setMedications(medicationService.findMedicationsByIdContains(containedMedicationIds));
         }
 
+        model.addAttribute("selectedMedications", selectedMedications);
         model.addAttribute("doctorAll", doctors);
         model.addAttribute("patientAll", patients);
-        model.addAttribute("medicationAll", medications);
 
         /* Doctors can add consults only on their behalf */
         if (UserService.isLoggedIn() && userService.isDoctor()) {
             consult.setDoctor(userService.getCurrentUser().getDoctor());
         }
 
-        return ADD_CONSULT;
+        return EDIT_CONSULT;
     }
 
     @GetMapping("/{id}/edit")
     public String editConsult(@PathVariable("id") String consultId, Model model) {
-        var consult = consultService.getConsultById(Long.valueOf(consultId));
-        var currentMedications = consult.getMedications();
+
         var doctors = doctorService.getAllDoctors();
         var patients = patientService.getAllPatients();
-        var selectedMedications = medicationService.getAllMedications().stream().map(med -> {
-            var isContained = currentMedications.contains(med);
-            return new SelectedMedication(med, isContained);
-        }).collect(Collectors.toList());
+        List<SelectedMedication> selectedMedications;
 
-        if (!model.containsAttribute("consult"))
+        /* First time display, no validation failed before */
+        if (!model.containsAttribute("consult")) {
+            var consult = consultService.getConsultById(Long.valueOf(consultId));
+            var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
+            selectedMedications = medicationService.getAllMedications().stream().map(med -> {
+                var isContained = containedMedicationIds.contains(med.getId());
+                return new SelectedMedication(med, isContained);
+            }).collect(Collectors.toList());
             model.addAttribute("consult", consult);
+        } else {
+            var consult = (Consult) model.getAttribute("consult");
+            var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
+            selectedMedications = medicationService.getAllMedications().stream().map(med -> {
+                var isContained = containedMedicationIds.contains(med.getId());
+                return new SelectedMedication(med, isContained);
+            }).collect(Collectors.toList());
+            consult.setMedications(medicationService.findMedicationsByIdContains(containedMedicationIds));
+        }
 
+        model.addAttribute("selectedMedications", selectedMedications);
         model.addAttribute("doctorAll", doctors);
         model.addAttribute("patientAll", patients);
-//        model.addAttribute("medicationAll", medications);
-        model.addAttribute("selectedMedications", selectedMedications);
 
         return EDIT_CONSULT;
     }
@@ -127,9 +149,6 @@ public class ConsultController {
         if (bindingResult.hasErrors()) {
             attr.addFlashAttribute(BINDING_RESULT_PATH + "consult", bindingResult);
             attr.addFlashAttribute("consult", consult);
-//            attr.addFlashAttribute("selectedMedicationIds", consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList()));
-//            attr.addFlashAttribute("selectedDoctorId", consult.getDoctor().getId());
-//            attr.addFlashAttribute("selectedPatientId", consult.getPatient().getId());
 
             if (consult.getId() != null) {
                 return REDIRECT + ALL_CONSULTS + "/" + consult.getId() + "/edit";
@@ -146,9 +165,4 @@ public class ConsultController {
         consultService.deleteConsultById(id);
         return REDIRECT + ALL_CONSULTS;
     }
-
-//    @InitBinder
-//    public void initBinder(WebDataBinder binder) {
-//        binder.registerCustomEditor(Date.class, new CustomDateEditor(SIMPLE_DATE_FORMAT, true));
-//    }
 }
