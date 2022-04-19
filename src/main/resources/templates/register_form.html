@@ -77,7 +77,7 @@
             <div class="row row justify-content-md-center">
                 <div class="col-md-3">
                     <label>Password:</label>
-                    <input type="text" name="username" class="form-control" th:value="${user.password}"
+                    <input type="password" name="username" class="form-control" th:value="${user.password}"
                            placeholder="Password"/>
                     <label th:if="${#fields.hasErrors('user.password')}" th:errors="${user.password}" type="error"
                            class="error text-danger">
