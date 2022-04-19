@@ -3,8 +3,6 @@ package com.example.project.service;
 import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Department;
-import com.example.project.model.Doctor;
-import com.example.project.model.Patient;
 import com.example.project.repository.DepartmentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,10 +40,10 @@ public class DepartmentService {
 
     public Department saveDepartment(Department department) {
 
-//        Optional<Department> departmentByName = getDepartmentByName(department.getName());
-//        if (departmentByName.isPresent()) {
-//            throw new CustomException(String.format("Department with name %s already exists!", department.getName()));
-//        }
+        Optional<Department> departmentByName = getDepartmentByName(department.getName());
+        if (departmentByName.isPresent()) {
+            throw new CustomException(String.format("Department with name %s already exists!", department.getName()));
+        }
 
         return departmentRepository.save(department);
     }

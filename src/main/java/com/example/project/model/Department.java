@@ -1,6 +1,5 @@
 package com.example.project.model;
 
-import com.example.project.constraint.annotation.UniqueDepartmentName;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,9 +1,9 @@
 package com.example.project.controller;
 
+import com.example.project.exception.CustomException;
 import com.example.project.model.Department;
 import com.example.project.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,7 +74,20 @@ public class DepartmentController {
                 return REDIRECT + ALL_DEPARTMENTS + "/new";
             }
         }
-        departmentService.saveDepartment(department);
+
+        try {
+            departmentService.saveDepartment(department);
+        } catch (CustomException e) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "department", bindingResult);
+            attr.addFlashAttribute("department", department);
+            attr.addFlashAttribute("error_department", e.getMessage());
+
+            if (department.getId() == null) {
+                return REDIRECT + ALL_DEPARTMENTS + "/new";
+            } else {
+                return REDIRECT + ALL_DEPARTMENTS + "/" + department.getId() + "/edit";
+            }
+        }
 
         return REDIRECT + ALL_DEPARTMENTS;
     }

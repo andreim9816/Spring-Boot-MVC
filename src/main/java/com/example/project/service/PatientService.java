@@ -1,5 +1,6 @@
 package com.example.project.service;
 
+import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Consult;
 import com.example.project.model.Patient;
@@ -27,12 +28,12 @@ public class PatientService {
                         .build());
     }
 
-    public Boolean checkIfPatientExists(Long patientId) {
+    public boolean checkIfPatientExists(Long patientId) {
         return patientRepository.findById(patientId).isPresent();
     }
 
-    public Boolean checkIfCnpExists(String cnp) {
-        return patientRepository.getByCnp(cnp) != null;
+    public boolean checkIfCnpExists(String cnp) {
+        return patientRepository.getByCnp(cnp).isPresent();
     }
 
     public List<Consult> getConsultsForPatient(Long patientId) {
@@ -45,27 +46,26 @@ public class PatientService {
     }
 
     public Patient savePatient(Patient patient) {
+
+        var existingPatient = patientRepository.getByCnp(patient.getCnp());
+        if (existingPatient.isEmpty()) {
+            return patientRepository.save(patient);
+        }
+
+        if (patient.getId() == null) {
+            // save flow
+            if (existingPatient.get().getCnp().equals(patient.getCnp())) {
+                throw new CustomException(String.format("CNP %s already taken!", patient.getCnp()));
+            }
+        } else {
+            // edit flow
+            if (existingPatient.get().getCnp().equals(patient.getCnp()) && !existingPatient.get().getId().equals(patient.getId())) {
+                throw new CustomException(String.format("CNP %s already taken!", patient.getCnp()));
+            }
+        }
+
         return patientRepository.save(patient);
     }
-
-//    public Patient updatePatient(ReqPatientUpdateDto reqPatientDto, Patient patient) {
-//
-//        /* Check for uniqueness address at DB level */
-//        if (!Objects.equals(reqPatientDto.getAddressId(), patient.getAddress().getId())
-//                && Boolean.TRUE.equals(addressService.checkIfAddressIsTakenByPatient(reqPatientDto.getAddressId()))) {
-//            throw new CustomException(String.format("Address with id %s already taken!", reqPatientDto.getAddressId()));
-//        }
-//
-//        /* Check for uniqueness of CNP */
-//        if (!Objects.equals(reqPatientDto.getCnp(), patient.getCnp())
-//                && Boolean.TRUE.equals(checkIfCnpExists(reqPatientDto.getCnp()))) {
-//            throw new CustomException(String.format("CNP %s already taken!", reqPatientDto.getCnp()));
-//        }
-//
-//        Patient updatedPatient = patientMapper.update(reqPatientDto, patient);
-//
-//        return savePatient(updatedPatient);
-//    }
 
     public void deletePatientById(Long patientId) {
         patientRepository.deleteById(patientId);

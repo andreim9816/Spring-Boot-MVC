@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.CustomException;
 import com.example.project.model.Medication;
 import com.example.project.service.MedicationService;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +73,21 @@ public class MedicationController {
                 return REDIRECT + ALL_MEDICATIONS + "/new";
             }
         }
-        medicationService.saveMedication(medication);
+
+        try {
+            medicationService.saveMedication(medication);
+        } catch (CustomException e) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "medication", bindingResult);
+            attr.addFlashAttribute("medication", medication);
+            attr.addFlashAttribute("error_medication", e.getMessage());
+
+            if (medication.getId() == null) {
+                return REDIRECT + ALL_MEDICATIONS + "/new";
+            } else {
+                return REDIRECT + ALL_MEDICATIONS + "/" + medication.getId() + "/edit";
+            }
+        }
+
         return REDIRECT + ALL_MEDICATIONS;
     }
 

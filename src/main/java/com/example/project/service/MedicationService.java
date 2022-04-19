@@ -50,7 +50,7 @@ public class MedicationService {
     }
 
     private void checkIfMedicationAlreadyExistsByNameAndQuantity(String name, Integer quantity) {
-        if (medicationRepository.findMedicationByNameAndQuantity(name, quantity) != null) {
+        if (medicationRepository.findMedicationByNameAndQuantity(name, quantity).isPresent()) {
             throw new CustomException(String.format("Medication %s with quantity %s already exists!", name, quantity));
         }
     }

@@ -41,6 +41,8 @@
                                class="error text-danger">
                             Error
                         </label>
+                        <label th:if="${error_cnp} != null" class="error text-danger"
+                               th:text="${error_cnp}"></label>
                     </div>
 
                     <div class="col-md-3" style="margin-left: 60px">

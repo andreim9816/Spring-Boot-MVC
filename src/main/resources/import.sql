@@ -12,7 +12,7 @@ insert into address(ADDRESS_ID, street, NUMBER, city) values (4, 'Splaiul Indepe
 
 -- patients
 
-insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK_ADDRESS_ID) values (1,'Andrei', 'Manolache', '19811281729311', 1, 1);
+insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK_ADDRESS_ID) values (1,'Andrei', 'Manolache', '1981128172911', 1, 1);
 insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK_ADDRESS_ID) values (2, 'Ciprian', 'Mocanu', '2991128110899', 1, 2);
 insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK_ADDRESS_ID) values (3, 'Vlad', 'Duncea', '2981019181709', 2, 3);
 insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK_ADDRESS_ID) values (4, 'Catalin', 'Oprisan', '6030327260867', 3, 4);

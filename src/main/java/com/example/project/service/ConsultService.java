@@ -1,5 +1,6 @@
 package com.example.project.service;
 
+import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Consult;
 import com.example.project.repository.ConsultRepository;
@@ -28,16 +29,11 @@ public class ConsultService {
                 );
     }
 
-    public Boolean checkIfConsultExists(Long id) {
-        return consultRepository.findById(id).isPresent();
-    }
-
-    public List<Consult> getAllConsultsForDoctorAndPatient(Long doctorId, Long patientId) {
-        return consultRepository.getConsultsByDoctorIdAndPatientId(doctorId, patientId);
-    }
-
     public Consult saveConsult(Consult consult) {
-        consult.setDate(new Date());
+        if (consult.getDate().after(new Date())) {
+            throw new CustomException("Date cannot be in the future!");
+        }
+
         return consultRepository.save(consult);
     }
 

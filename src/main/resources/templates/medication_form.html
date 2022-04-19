@@ -51,6 +51,8 @@
                                        th:errors="${medication.quantity}" type="error" class="error text-danger">
                                     Error
                                 </label>
+                                <label th:if="${error_medication} != null" class="error text-danger"
+                                       th:text="${error_medication}"></label>
                             </div>
                         </div>
                     </div>

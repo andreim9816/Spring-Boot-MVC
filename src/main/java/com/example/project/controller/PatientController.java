@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.CustomException;
 import com.example.project.model.Address;
 import com.example.project.model.Patient;
 import com.example.project.service.AddressService;
@@ -93,8 +94,21 @@ public class PatientController {
 
         address.setPatient(patient);
         patient.setAddress(address);
-        patientService.savePatient(patient);
+
+        try {
+            patientService.savePatient(patient);
 //        addressService.saveAddress(address);
+        } catch (CustomException e) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "patient", bindingResultPatient);
+            attr.addFlashAttribute("patient", patient);
+            attr.addFlashAttribute("error_cnp", e.getMessage());
+
+            if (patient.getId() == null) {
+                return REDIRECT + ALL_PATIENTS + "/new";
+            } else {
+                return REDIRECT + ALL_PATIENTS + "/" + patient.getId() + "/edit";
+            }
+        }
 
         return REDIRECT + ALL_PATIENTS;
     }

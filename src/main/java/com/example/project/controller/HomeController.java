@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.CustomException;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.User;
 import com.example.project.service.DepartmentService;
@@ -25,7 +26,7 @@ import static com.example.project.controller.DepartmentController.*;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final static String REGISTER = "register";
+    private final static String REGISTER = "register_form";
     private final static String LOGIN = "login";
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -41,9 +42,15 @@ public class HomeController {
 
     @GetMapping("/register")
     public String register(Model model) {
-        if (!model.containsAttribute("user"))
+        if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
-        return "register_form";
+        }
+        if (!model.containsAttribute("doctor")) {
+            model.addAttribute("doctor", new Doctor());
+        }
+        model.addAttribute("departmentAll", departmentService.getAllDepartments());
+
+        return REGISTER;
     }
 
     @PostMapping("/process_register")
@@ -74,9 +81,11 @@ public class HomeController {
 //                .password(encodedPassword)
 //                .authority(authorityService.getByRole("ROLE_CUSTOMER"))
 //                .build();
-//        try {
+        try {
             userService.saveUser(user);
-//        } catch (PhoneNotUniqueException e) {
+        } catch (CustomException e) {
+
+        }
 //            attr.addFlashAttribute("exPhone", e.getMessage());
 //            attr.addFlashAttribute("org.springframework.validation.BindingResult.user", bindingResult);
 //            attr.addFlashAttribute("user", user);

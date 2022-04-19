@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MedicationRepository extends JpaRepository<Medication, Long> {
 
-    Medication findMedicationByNameAndQuantity(String name, Integer quantity);
+    Optional<Medication> findMedicationByNameAndQuantity(String name, Integer quantity);
 
     @Query("select med FROM Medication med where med.id in (:ids)")
     List<Medication> findMedicationsByIdContains(List<Long> ids);

@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.CustomException;
 import com.example.project.model.Consult;
 import com.example.project.model.Doctor;
 import com.example.project.model.Medication;
@@ -34,7 +35,7 @@ public class ConsultController {
 
     private final static String ALL_CONSULTS = "consults";
     private final static String VIEW_CONSULT = "consult_info";
-    private final static String EDIT_CONSULT = "consult_form";
+    private final static String ADD_EDIT_CONSULT = "consult_form";
 
     private final ConsultService consultService;
     private final DoctorService doctorService;
@@ -91,11 +92,10 @@ public class ConsultController {
         } else {
             consult = (Consult) model.getAttribute("consult");
             var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
-            selectedMedications = medicationService.getAllMedications().stream()
-                    .map(med -> {
-                        var isContained = containedMedicationIds.contains(med.getId());
-                        return new SelectedMedication(med, isContained);
-                    }).collect(Collectors.toList());
+            selectedMedications = medicationService.getAllMedications().stream().map(med -> {
+                var isContained = containedMedicationIds.contains(med.getId());
+                return new SelectedMedication(med, isContained);
+            }).collect(Collectors.toList());
             consult.setMedications(medicationService.findMedicationsByIdContains(containedMedicationIds));
         }
 
@@ -108,7 +108,7 @@ public class ConsultController {
             consult.setDoctor(userService.getCurrentUser().getDoctor());
         }
 
-        return EDIT_CONSULT;
+        return ADD_EDIT_CONSULT;
     }
 
     @GetMapping("/{id}/edit")
@@ -141,7 +141,7 @@ public class ConsultController {
         model.addAttribute("doctorAll", doctors);
         model.addAttribute("patientAll", patients);
 
-        return EDIT_CONSULT;
+        return ADD_EDIT_CONSULT;
     }
 
     @PostMapping
@@ -156,7 +156,20 @@ public class ConsultController {
                 return REDIRECT + ALL_CONSULTS + "/new";
             }
         }
-        consultService.saveConsult(consult);
+
+        try {
+            consultService.saveConsult(consult);
+        } catch (CustomException e) {
+            attr.addFlashAttribute(BINDING_RESULT_PATH + "consult", bindingResult);
+            attr.addFlashAttribute("consult", consult);
+            attr.addFlashAttribute("error_date", e.getMessage());
+
+            if (consult.getId() != null) {
+                return REDIRECT + ALL_CONSULTS + "/" + consult.getId() + "/edit";
+            } else {
+                return REDIRECT + ALL_CONSULTS + "/new";
+            }
+        }
         return REDIRECT + ALL_CONSULTS;
     }
 
