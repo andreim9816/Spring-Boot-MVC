@@ -1,9 +1,13 @@
 package com.example.project.service.security;
 
 import com.example.project.exception.EntityNotFoundException;
+import com.example.project.exception.NotUniqueEmailException;
+import com.example.project.exception.NotUniqueUsernameException;
+import com.example.project.model.Doctor;
 import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
 import com.example.project.repository.security.UserRepository;
+import com.example.project.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +26,7 @@ import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DoctorService doctorService;
 
     public User findByUsername(String username) {
         Optional<User> userOpt = userRepository.findByUsername(username);
@@ -40,32 +46,28 @@ public class UserService {
         return !isDoctor();
     }
 
-    public User saveUser(User user) {
-//        Optional<User> userEmail = userRepository.findByEmail(user.getEmail());
-//        if (userEmail.isPresent() && user.getId() != userEmail.get().getId()) {
-//            // an user with the same email already exists;
-//            // 1. the saved user did not changed the email => userEmail.id = user.id
-//            // 2. the saved user changed the email => another user was found with this email
-//            throw new EmailNotUniqueException(user.getEmail());
-//        }
-//        Optional<User> userPhoneNumber = userRepository.findByPhoneNumber(user.getPhoneNumber());
-//        if (userPhoneNumber.isPresent() && user.getId() != userPhoneNumber.get().getId())
-//            throw new PhoneNotUniqueException(user.getPhoneNumber());
-//
-//        Optional<User> userUsername = userRepository.findByUsername(user.getUsername());
-//        if (userUsername.isPresent() && user.getId() != userUsername.get().getId())
-//            throw new UsernameNotUniqueException(user.getUsername());
+    public User saveOrUpdateUser(User user) {
 
-        return userRepository.save(user);
+        var userUsername = getUserByUsername(user.getUsername());
+        var userEmail = getUserByEmail(user.getEmail());
+
+        if (userUsername.isPresent() && !Objects.equals(userUsername.get().getId(), user.getId())) {
+            throw new NotUniqueUsernameException(String.format("Username %s already exists!", user.getUsername()));
+        }
+
+        if (userEmail.isPresent() && !Objects.equals(userEmail.get().getEmail(), user.getEmail())) {
+            throw new NotUniqueEmailException(String.format("Email %s already exists!", user.getEmail()));
+        }
+
+//        Doctor doctorSaved = doctorService.saveDoctor(user.getDoctor());
+//        user.setDoctor(doctorSaved);
+        return doctorService.saveDoctor(user.getDoctor()).getUser();
+//        return userRepository.save(user);
     }
 
     public List<User> findAll() {
         return userRepository.findAll();
     }
-
-//    public User findById(Long id) {
-//        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
-//    }
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
@@ -96,15 +98,11 @@ public class UserService {
         }
     }
 
-//    private void checkUniqueEmail(String email) {
-//        Optional<User> user = userRepository.findByEmail(email);
-//        if (user.isPresent())
-//            throw new EmailNotUniqueException(email);
-//    }
-//
-//    private void checkUniquePhoneNumber(String phone) {
-//        Optional<User> user = userRepository.findByPhoneNumber(phone);
-//        if (user.isPresent())
-//            throw new PhoneNotUniqueException(phone);
-//    }
+    private Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    private Optional<User> getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

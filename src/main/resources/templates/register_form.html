@@ -13,6 +13,8 @@
     </div>
 
     <form th:action="@{/register/}" class="form-group align-content-lg-start p-3" method="post">
+        <input name="id" type="hidden" th:field="${user.id}"/>
+        <input name="id" type="hidden" th:field="${doctor.id}"/>
         <div class="container">
 
             <div class="row row justify-content-md-center">
@@ -41,8 +43,7 @@
                     <label>Last name:</label>
                     <input type="text" name="lastName" class="form-control" th:field="${doctor.lastName}"
                            placeholder="Last name"/>
-                    <label th:if="${#fields.hasErrors('doctor.lastName')}" th:errors="${doctor.lastName}"
-                           type="error"
+                    <label th:if="${#fields.hasErrors('doctor.lastName')}" th:errors="${doctor.lastName}" type="error"
                            class="error text-danger">
                         Error
                     </label>
@@ -52,7 +53,7 @@
             <div class="row row justify-content-md-center">
                 <div class="col-md-3">
                     <label>Email:</label>
-                    <input type="text" name="username" class="form-control" th:value="${user.email}"
+                    <input type="text" name="email" class="form-control" th:value="${user.email}"
                            placeholder="Email"/>
                     <label th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}" type="error"
                            class="error text-danger">
@@ -64,7 +65,7 @@
 
                 <div class="col-md-3" style="margin-left: 60px">
                     <label>First name:</label>
-                    <input type="text" name="lastName" class="form-control" th:field="${doctor.firstName}"
+                    <input type="text" name="firstName" class="form-control" th:field="${doctor.firstName}"
                            placeholder="First name"/>
                     <label th:if="${#fields.hasErrors('doctor.firstName')}" th:errors="${doctor.firstName}"
                            type="error"
@@ -77,7 +78,7 @@
             <div class="row row justify-content-md-center">
                 <div class="col-md-3">
                     <label>Password:</label>
-                    <input type="password" name="username" class="form-control" th:value="${user.password}"
+                    <input type="password" name="password" class="form-control" th:value="${user.password}"
                            placeholder="Password"/>
                     <label th:if="${#fields.hasErrors('user.password')}" th:errors="${user.password}" type="error"
                            class="error text-danger">

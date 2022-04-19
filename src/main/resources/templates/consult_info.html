@@ -51,7 +51,7 @@
                     <p class="form-control" th:text="${doctorName}"></p>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <label>Date:</label>
                     <p class="form-control"
                        th:text="${T(com.example.project.service.Helper).formatDate(consult.date)}"></p>
@@ -64,14 +64,14 @@
                     <p class="form-control" th:text="${consult.symptoms}"></p>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <label>Diagnose:</label>
                     <p class="form-control" th:text="${consult.diagnose}"></p>
                 </div>
             </div>
 
             <div class="row col-md-8">
-                <div class="col-md-10">
+                <div class="col-md-11">
                     <label>Comments:</label>
                     <p class="form-control" th:text="${consult.comment}"></p>
                 </div>

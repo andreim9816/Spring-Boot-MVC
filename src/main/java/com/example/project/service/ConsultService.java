@@ -5,6 +5,8 @@ import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Consult;
 import com.example.project.repository.ConsultRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,8 +18,8 @@ public class ConsultService {
 
     private final ConsultRepository consultRepository;
 
-    public List<Consult> getAllConsults() {
-        return consultRepository.findAll();
+    public Page<Consult> getAllConsults(Pageable pageable) {
+        return consultRepository.findAll(pageable);
     }
 
     public Consult getConsultById(Long id) {

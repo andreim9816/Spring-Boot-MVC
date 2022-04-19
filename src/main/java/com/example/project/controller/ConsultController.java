@@ -12,6 +12,8 @@ import com.example.project.service.MedicationService;
 import com.example.project.service.PatientService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,9 +46,13 @@ public class ConsultController {
     private final UserService userService;
 
     @GetMapping
-    public String getAll(Model model) {
-        var consults = consultService.getAllConsults();
+    public String getAll(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page,
+                         @RequestParam(value = "size", defaultValue = "10") Integer size,
+                         @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        var consults = consultService.getAllConsults(PageRequest.of(page - 1, size, Sort.by(sortBy)));
         model.addAttribute("consults", consults);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("page", page);
         return ALL_CONSULTS;
     }
 

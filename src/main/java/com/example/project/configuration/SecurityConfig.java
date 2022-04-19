@@ -27,11 +27,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
                 .withUser("admin_1")
-                .password(passwordEncoder().encode("12345"))
+                .password(passwordEncoder().encode("123456"))
                 .roles(ROLE_ADMIN)
                 .and()
                 .withUser("doctor_1")
-                .password(passwordEncoder().encode("12345"))
+                .password(passwordEncoder().encode("123456"))
                 .roles(ROLE_DOCTOR);
     }
 
@@ -58,8 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/consults/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
                 .antMatchers("/consults/new").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
-                .antMatchers("/consults/{^[0-9]+}").permitAll()
-                .antMatchers("/consults").permitAll()
+                .antMatchers("/consults/{^[0-9]+}").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
+                .antMatchers("/consults").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
 
                 .antMatchers("/**/bootstrap/**").permitAll()
 

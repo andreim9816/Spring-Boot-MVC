@@ -32,15 +32,17 @@ public class DataLoader implements CommandLineRunner {
 
             User admin = User.builder()
                     .username("admin_1")
-                    .password(passwordEncoder.encode("12345"))
+                    .password(passwordEncoder.encode("123456"))
+                    .email("admin_1@email.com")
                     .authority(adminRole)
                     .build();
 
             Doctor doctorWithId1 = doctorService.getById(1L);
             User doctor = User.builder()
                     .username("doctor_1")
-                    .password(passwordEncoder.encode("12345"))
+                    .password(passwordEncoder.encode("123456"))
                     .doctor(doctorWithId1)
+                    .email("doctor_1@email.com")
                     .authority(doctorRole)
                     .build();
 

@@ -62,7 +62,7 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label>Date:</label>
                         <input class="form-control" name="date" type="date" style="margin-top:13px" th:field="*{date}"
                                th:value="${T(com.example.project.service.Helper).formatDate(consult.date)}"
@@ -86,7 +86,7 @@
                         </label>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <label>Diagnose:</label>
                         <input type="text" class="form-control" th:field="*{diagnose}" placeholder="Diagnose"/>
                         <label th:if="${#fields.hasErrors('diagnose')}" th:errors="*{diagnose}" type="error"
@@ -97,7 +97,7 @@
                 </div>
 
                 <div class="row col-md-8">
-                    <div class="col-md-10">
+                    <div class="col-md-11">
                         <label>Comments:</label>
                         <input type="text" class="form-control" th:field="*{comment}" placeholder="Comments"/>
                         <label th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" type="error"
