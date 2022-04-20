@@ -54,12 +54,17 @@
 
                     <div class="col-md-4">
                         <label class="col-form-label">Doctor:</label>
-                        <select class="form-control" th:field="*{doctor.id}">
-                            <option th:each="doctor : ${doctorAll}"
-                                    th:value="${doctor.id}"
-                                    th:utext="|${doctor.lastName} ${doctor.firstName}|">
-                            </option>
-                        </select>
+                        <div th:if="${isDoctor}">
+                            <p class="form-control" th:text="${doctorName}"></p>
+                        </div>
+                        <div th:unless="${isDoctor}">
+                            <select class="form-control" th:field="*{doctor.id}">
+                                <option th:each="doctor : ${doctorAll}"
+                                        th:value="${doctor.id}"
+                                        th:utext="|${doctor.lastName} ${doctor.firstName}|">
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="col-md-3">

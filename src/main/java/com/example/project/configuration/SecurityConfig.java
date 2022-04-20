@@ -40,6 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
 //                .anyRequest().authenticated()
+                .antMatchers("/h2-console/login.do*").permitAll()
+
                 .antMatchers("/departments/new", "/departments/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
                 .antMatchers("/departments/{^[0-9]+}").permitAll()
                 .antMatchers("/departments").permitAll()
@@ -48,7 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/patients/{^[0-9]+}").hasAnyRole(ROLE_ADMIN, ROLE_DOCTOR)
                 .antMatchers("/patients").hasAnyRole(ROLE_ADMIN, ROLE_DOCTOR)
 
-                .antMatchers("/doctors/new", "/doctors/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
+//                .antMatchers("/doctors/new", "/doctors/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
+                .antMatchers("/doctors/{^[0-9]+}/edit").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
+                .antMatchers("/doctors/my-profile").hasAnyRole(ROLE_DOCTOR)
                 .antMatchers("/doctors/{^[0-9]+}").permitAll()
                 .antMatchers("/doctors").permitAll()
 
@@ -56,9 +60,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/medications/{^[0-9]+}").permitAll()
                 .antMatchers("/medications").permitAll()
 
-                .antMatchers("/consults/{^[0-9]+}/edit").hasRole(ROLE_ADMIN)
+                .antMatchers("/consults/{^[0-9]+}/edit").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
                 .antMatchers("/consults/new").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
                 .antMatchers("/consults/{^[0-9]+}").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
+                .antMatchers("/consults/my-consults").hasRole(ROLE_DOCTOR)
                 .antMatchers("/consults").hasAnyRole(ROLE_DOCTOR, ROLE_ADMIN)
 
                 .antMatchers("/**/bootstrap/**").permitAll()
@@ -72,8 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/index")
                 .invalidateHttpSession(true)
                 .and()
-                .exceptionHandling().accessDeniedPage("/access_denied");
+                .exceptionHandling().accessDeniedPage("/access-denied");
 
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
         // http.headers().frameOptions().sameOrigin();
 
     }

@@ -15,55 +15,55 @@
             <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/index' ? 'active':''}"
                    th:href="@{/departments}">Departments</a></li>
 
-            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')"><a class="nav-link"
-                                                                th:classappend="${#httpServletRequest.getRequestURI() == '/patients' ? 'active':''}"
-                                                                th:href="@{/patients}">Patients</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')">
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/patients' ? 'active':''}"
+                   th:href="@{/patients}">Patients
+                </a>
+            </li>
 
-            <li><a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/Doctors' ? 'active':''}"
-                   th:href="@{/doctors}">Doctors</a></li>
+            <li>
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/doctors' ? 'active':''}"
+                   th:href="@{/doctors}">Doctors
+                </a>
+            </li>
 
-            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')"><a class="nav-link"
-                                                                th:classappend="${#httpServletRequest.getRequestURI() == '/consults' ? 'active':''}"
-                                                                th:href="@{/consults}">Consults</a></li>
+            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')">
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/consults' ? 'active':''}"
+                   th:href="@{/consults}">Consults
+                </a>
+            </li>
 
-            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')"><a class="nav-link"
-                                                                th:classappend="${#httpServletRequest.getRequestURI() == '/medications' ? 'active':''}"
-                                                                th:href="@{/medications}">Medications</a></li>
+            <li sec:authorize="hasRole('DOCTOR')">
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/consults' ? 'active':''}"
+                   th:href="@{/consults/my-consults}">My consults
+                </a>
+            </li>
 
-            <!--            <div sec:authorize="hasRole('CUSTOMER')">-->
-            <!--                <li><a class="nav-link"-->
-            <!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/users/myProfile' ? 'active':''}"-->
-            <!--                       th:href="@{/users/myProfile}">My profile</a></li>-->
-            <!--            </div>-->
-            <!--            <div sec:authorize="hasRole('CUSTOMER')">-->
-            <!--                <li><a class="nav-link"-->
-            <!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/bookings/myBookings' ? 'active':''}"-->
-            <!--                       th:href="@{/bookings/myBookings}">My bookings</a></li>-->
-            <!--            </div>-->
+            <li sec:authorize="hasRole('DOCTOR')">
+                <a class="nav-link" th:classappend="${#httpServletRequest.getRequestURI() == '/doctors' ? 'active':''}"
+                   th:href="@{/doctors/my-profile}">My profile
+                </a>
+            </li>
 
-            <!--            <div sec:authorize="hasRole('ADMIN')">-->
-            <!--                <li><a class="nav-link"-->
-            <!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/users' ? 'active':''}"-->
-            <!--                       th:href="@{/users}">Our users</a></li>-->
-            <!--            </div>-->
-            <!--            <div sec:authorize="hasRole('ADMIN')">-->
-            <!--                <li><a class="nav-link"-->
-            <!--                       th:classappend="${#httpServletRequest.getRequestURI() == '/bookings' ? 'active':''}"-->
-            <!--                       th:href="@{/bookings}">Our bookings</a></li>-->
-            <!--            </div>-->
+            <li sec:authorize="hasAnyRole('ADMIN','DOCTOR')">
+                <a class="nav-link"
+                   th:classappend="${#httpServletRequest.getRequestURI() == '/medications' ? 'active':''}"
+                   th:href="@{/medications}">Medications
+                </a>
+            </li>
 
             <li>
                 <form th:if="${T(com.example.project.service.security.UserService).isLoggedIn()}" id="logoutform"
                       th:action="@{/logout}" method="POST">
-                    <a class="nav-link" href="#" onclick="document.getElementById('logoutform').submit()">Logout</a>
+                    <a class="nav-link" href="#" onclick="document.getElementById('logoutform').submit()">
+                        Logout
+                    </a>
                 </form>
                 <a class="nav-link" th:unless="${T(com.example.project.service.security.UserService).isLoggedIn()}"
-                   id="loginform"
-                   th:href="@{/login}">Login
+                   id="loginform" th:href="@{/login}">
+                    Login
                 </a>
             </li>
-
-
         </ul>
     </div>
 </nav>

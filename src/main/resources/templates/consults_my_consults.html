@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Consults</title>
@@ -21,8 +21,7 @@
             <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=date'}">Date</a></th>
             <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=diagnose'}">Diagnose</a></th>
             <th>Details</th>
-            <th sec:authorize="hasRole('ADMIN')">Edit</th>
-            <th sec:authorize="hasRole('ADMIN')">Delete</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tr th:each="consult: ${consults.content}">
@@ -37,15 +36,15 @@
                     <button class="btn btn-secondary">Details</button>
                 </a>
             </td>
-            <td sec:authorize="hasRole('ADMIN')">
-                <a class="btn btn-secondary" href="#" th:href="@{/consults/{id}/edit(id=${consult.id})}"
-                   role="button">
+            <!--            <td sec:authorize="hasAnyRole('ADMIN','DOCTOR')">-->
+            <td>
+                <a class="btn btn-secondary" href="#" th:href="@{/consults/{id}/edit(id=${consult.id})}" role="button">
                     Edit
                 </a>
             </td>
-            <td sec:authorize="hasRole('ADMIN')">
-                <form th:object="${consult}" th:action="@{/consults/{id}(id=${consult.id})}"
-                      th:method="delete">
+            <!--            <td sec:authorize="hasRole('ADMIN')">-->
+            <td>
+                <form th:object="${consult}" th:action="@{/consults/{id}(id=${consult.id})}" th:method="delete">
                     <button class="btn btn-secondary">Delete</button>
                 </form>
             </td>
@@ -72,7 +71,8 @@
         </ul>
     </nav>
 </div>
-<div sec:authorize="hasAnyRole('ADMIN', 'DOCTOR')" class="container">
+<!--<div sec:authorize="hasAnyRole('ADMIN', 'DOCTOR')" class="container">-->
+<div class="container">
     <div class="row">
         <div class="col-md-6">
             <a class="btn btn-primary" role="button" th:href="@{'/consults/new'}" th:method="POST">Add consult</a>

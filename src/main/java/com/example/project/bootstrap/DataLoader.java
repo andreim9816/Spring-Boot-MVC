@@ -38,7 +38,10 @@ public class DataLoader implements CommandLineRunner {
                     .build();
 
             Doctor doctorWithId1 = doctorService.getById(1L);
-            User doctor = User.builder()
+            Doctor doctorWithId2 = doctorService.getById(2L);
+            Doctor doctorWithId3 = doctorService.getById(3L);
+
+            User doctor1 = User.builder()
                     .username("doctor_1")
                     .password(passwordEncoder.encode("123456"))
                     .doctor(doctorWithId1)
@@ -46,10 +49,34 @@ public class DataLoader implements CommandLineRunner {
                     .authority(doctorRole)
                     .build();
 
-            doctorWithId1.setUser(doctor);
+            User doctor2 = User.builder()
+                    .username("doctor_2")
+                    .password(passwordEncoder.encode("123456"))
+                    .doctor(doctorWithId2)
+                    .email("doctor_2@email.com")
+                    .authority(doctorRole)
+                    .build();
+
+            User doctor3 = User.builder()
+                    .username("doctor_3")
+                    .password(passwordEncoder.encode("123456"))
+                    .doctor(doctorWithId3)
+                    .email("doctor_3@email.com")
+                    .authority(doctorRole)
+                    .build();
+
+            doctorWithId1.setUser(doctor1);
+            doctorWithId2.setUser(doctor2);
+            doctorWithId3.setUser(doctor3);
+
             userRepository.save(admin);
-            userRepository.save(doctor);
+//            userRepository.save(doctor1);
+//            userRepository.save(doctor2);
+//            userRepository.save(doctor3);
+
             doctorService.saveDoctor(doctorWithId1);
+            doctorService.saveDoctor(doctorWithId2);
+            doctorService.saveDoctor(doctorWithId3);
         }
     }
 

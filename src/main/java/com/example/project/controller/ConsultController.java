@@ -36,6 +36,7 @@ import static com.example.project.controller.DepartmentController.REDIRECT;
 public class ConsultController {
 
     private final static String ALL_CONSULTS = "consults";
+    private final static String MY_CONSULTS = ALL_CONSULTS + "_my_consults";
     private final static String VIEW_CONSULT = "consult_info";
     private final static String ADD_EDIT_CONSULT = "consult_form";
 
@@ -54,6 +55,16 @@ public class ConsultController {
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("page", page);
         return ALL_CONSULTS;
+    }
+
+    @GetMapping("/my-consults")
+    public String getMyConsults(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page,
+                                @RequestParam(value = "size", defaultValue = "10") Integer size,
+                                @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        var myDoctorId = userService.getCurrentUser().getDoctor().getId();
+        var myConsults = consultService.getConsultsByDoctorId(PageRequest.of(page - 1, size, Sort.by(sortBy)), myDoctorId);
+        model.addAttribute("consults", myConsults);
+        return MY_CONSULTS;
     }
 
     @GetMapping("/{id}")
@@ -112,6 +123,11 @@ public class ConsultController {
         /* Doctors can add consults only on their behalf */
         if (UserService.isLoggedIn() && userService.isDoctor()) {
             consult.setDoctor(userService.getCurrentUser().getDoctor());
+            var doctorName = consult.getDoctor().getLastName() + " " + consult.getDoctor().getFirstName();
+            model.addAttribute("isDoctor", true);
+            model.addAttribute("doctorName", doctorName);
+        } else {
+            model.addAttribute("isDoctor", false);
         }
 
         return ADD_EDIT_CONSULT;
@@ -119,14 +135,17 @@ public class ConsultController {
 
     @GetMapping("/{id}/edit")
     public String editConsult(@PathVariable("id") String consultId, Model model) {
-
+        if (userService.isDoctor() && !consultService.isMyConsult(Long.valueOf(consultId))) {
+            return "access_denied";
+        }
         var doctors = doctorService.getAllDoctors();
         var patients = patientService.getAllPatients();
         List<SelectedMedication> selectedMedications;
+        Consult consult;
 
         /* First time display, no validation failed before */
         if (!model.containsAttribute("consult")) {
-            var consult = consultService.getConsultById(Long.valueOf(consultId));
+            consult = consultService.getConsultById(Long.valueOf(consultId));
             var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
             selectedMedications = medicationService.getAllMedications().stream().map(med -> {
                 var isContained = containedMedicationIds.contains(med.getId());
@@ -134,7 +153,7 @@ public class ConsultController {
             }).collect(Collectors.toList());
             model.addAttribute("consult", consult);
         } else {
-            var consult = (Consult) model.getAttribute("consult");
+            consult = (Consult) model.getAttribute("consult");
             var containedMedicationIds = consult.getMedications() == null ? new ArrayList<Long>() : consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
             selectedMedications = medicationService.getAllMedications().stream().map(med -> {
                 var isContained = containedMedicationIds.contains(med.getId());
@@ -146,6 +165,16 @@ public class ConsultController {
         model.addAttribute("selectedMedications", selectedMedications);
         model.addAttribute("doctorAll", doctors);
         model.addAttribute("patientAll", patients);
+
+        /* Doctors can edit only their consults */
+        if (UserService.isLoggedIn() && userService.isDoctor()) {
+            consult.setDoctor(userService.getCurrentUser().getDoctor());
+            var doctorName = consult.getDoctor().getLastName() + " " + consult.getDoctor().getFirstName();
+            model.addAttribute("isDoctor", true);
+            model.addAttribute("doctorName", doctorName);
+        } else {
+            model.addAttribute("isDoctor", false);
+        }
 
         return ADD_EDIT_CONSULT;
     }

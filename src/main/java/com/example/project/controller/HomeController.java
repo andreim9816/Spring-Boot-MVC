@@ -27,6 +27,7 @@ import static com.example.project.controller.DepartmentController.*;
 @RequiredArgsConstructor
 public class HomeController {
 
+    public final static String ACCESS_DENIED = "access-denied";
     private final static String REGISTER_FORM = "register_form";
     private final static String REGISTER = "register";
     private final static String LOGIN = "login";
@@ -107,7 +108,7 @@ public class HomeController {
         return "login-error";
     }
 
-    @GetMapping("/access_denied")
+    @GetMapping("/" + ACCESS_DENIED)
     public String accessDenied() {
         return "access_denied";
     }
