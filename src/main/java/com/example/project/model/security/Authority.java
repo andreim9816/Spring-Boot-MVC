@@ -15,6 +15,7 @@ public class Authority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "AUTHORITY_ID")
     private Long id;
 
     private String role;

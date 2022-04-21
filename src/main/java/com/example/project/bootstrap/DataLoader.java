@@ -20,7 +20,6 @@ import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
 public class DataLoader implements CommandLineRunner {
 
     private final AuthorityRepository authorityRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final DoctorService doctorService;
@@ -70,9 +69,9 @@ public class DataLoader implements CommandLineRunner {
             doctorWithId3.setUser(doctor3);
 
             userRepository.save(admin);
-//            userRepository.save(doctor1);
-//            userRepository.save(doctor2);
-//            userRepository.save(doctor3);
+            userRepository.save(doctor1);
+            userRepository.save(doctor2);
+            userRepository.save(doctor3);
 
             doctorService.saveDoctor(doctorWithId1);
             doctorService.saveDoctor(doctorWithId2);

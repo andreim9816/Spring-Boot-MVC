@@ -6,12 +6,13 @@ import com.example.project.model.Consult;
 import com.example.project.model.Patient;
 import com.example.project.repository.PatientRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
@@ -26,14 +27,6 @@ public class PatientService {
                         .entityId(patientId)
                         .entityType("Patient")
                         .build());
-    }
-
-    public boolean checkIfPatientExists(Long patientId) {
-        return patientRepository.findById(patientId).isPresent();
-    }
-
-    public boolean checkIfCnpExists(String cnp) {
-        return patientRepository.getByCnp(cnp).isPresent();
     }
 
     public List<Consult> getConsultsForPatient(Long patientId) {

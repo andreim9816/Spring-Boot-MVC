@@ -59,44 +59,44 @@ public class HomeController {
         return REGISTER_FORM;
     }
 
-    @PostMapping("/register")
-    public String processRegister(@ModelAttribute("user") @Valid User user, BindingResult bindingResultUser,
-                                  @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResultDoctor,
-                                  RedirectAttributes attr) {
-        if (bindingResultUser.hasErrors() || bindingResultDoctor.hasErrors()) {
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
-            attr.addFlashAttribute("user", user);
-            attr.addFlashAttribute("doctor", doctor);
-            return REDIRECT + REGISTER;
-        }
-
-        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user.setAuthorities(Set.of(authorityService.getByRole(ROLE_DOCTOR)));
-
-        user.setDoctor(doctor);
-        doctor.setUser(user);
-
-        try {
-            userService.saveOrUpdateUser(user);
-        } catch (NotUniqueEmailException e) {
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
-            attr.addFlashAttribute("user", user);
-            attr.addFlashAttribute("doctor", doctor);
-            attr.addFlashAttribute("error_email", e.getMessage());
-            return REDIRECT + REGISTER;
-        } catch (NotUniqueUsernameException e) {
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
-            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
-            attr.addFlashAttribute("user", user);
-            attr.addFlashAttribute("doctor", doctor);
-            attr.addFlashAttribute("error_username", e.getMessage());
-            return REDIRECT + REGISTER;
-        }
-        return REDIRECT + LOGIN;
-    }
+//    @PostMapping("/register")
+//    public String processRegister(@ModelAttribute("user") @Valid User user, BindingResult bindingResultUser,
+//                                  @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResultDoctor,
+//                                  RedirectAttributes attr) {
+//        if (bindingResultUser.hasErrors() || bindingResultDoctor.hasErrors()) {
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
+//            attr.addFlashAttribute("user", user);
+//            attr.addFlashAttribute("doctor", doctor);
+//            return REDIRECT + REGISTER;
+//        }
+//
+//        String encodedPassword = bCryptPasswordEncoder.encode(user.getPassword());
+//        user.setPassword(encodedPassword);
+//        user.setAuthorities(Set.of(authorityService.getByRole(ROLE_DOCTOR)));
+//
+//        user.setDoctor(doctor);
+//        doctor.setUser(user);
+//
+//        try {
+//            userService.saveOrUpdateUser(user, doctor, password);
+//        } catch (NotUniqueEmailException e) {
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
+//            attr.addFlashAttribute("user", user);
+//            attr.addFlashAttribute("doctor", doctor);
+//            attr.addFlashAttribute("error_email", e.getMessage());
+//            return REDIRECT + REGISTER;
+//        } catch (NotUniqueUsernameException e) {
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
+//            attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
+//            attr.addFlashAttribute("user", user);
+//            attr.addFlashAttribute("doctor", doctor);
+//            attr.addFlashAttribute("error_username", e.getMessage());
+//            return REDIRECT + REGISTER;
+//        }
+//        return REDIRECT + LOGIN;
+//    }
 
     @GetMapping("/login")
     public String showLoginForm() {

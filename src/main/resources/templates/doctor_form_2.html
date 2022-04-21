@@ -12,8 +12,8 @@
 <div th:insert="navbar :: navbar"></div>
 
 <form th:action="@{/doctors/}" method="post">
-    <input name="id" type="hidden" th:field="${user.id}"/>
-    <input name="id" type="hidden" th:field="${doctor.id}"/>
+    <input type="hidden" th:value="${user.identifier}" name="identifier"/>
+    <input type="hidden" th:value="${doctor.id}" name="id"/>
     <div class="container">
 
         <div class="row row justify-content-md-center">
@@ -28,14 +28,22 @@
         <div class="row row justify-content-md-center">
             <div class="col-md-3">
                 <label>Username:</label>
-                <input type="text" name="username" class="form-control" th:value="${user.username}"
-                       placeholder="Username"/>
-                <label th:if="${#fields.hasErrors('user.username')}" th:errors="${user.username}" type="error"
-                       class="error text-danger">
-                    Error
-                </label>
-                <label th:if="${error_username} != null" class="error text-danger"
-                       th:text="${error_username}"></label>
+
+                <div th:if="${isDoctor}">
+                    <p class="form-control" th:text="${user.username}"></p>
+                    <input type="hidden" th:field="*{user.username}" >
+                </div>
+
+                <div th:unless="${isDoctor}">
+                    <input type="text" name="username" class="form-control" th:value="${user.username}"
+                           placeholder="Username"/>
+                    <label th:if="${#fields.hasErrors('user.username')}" th:errors="${user.username}" type="error"
+                           class="error text-danger">
+                        Error
+                    </label>
+                    <label th:if="${error_username} != null" class="error text-danger"
+                           th:text="${error_username}"></label>
+                </div>
             </div>
 
             <div class="col-md-3" style="margin-left: 60px">
@@ -77,16 +85,15 @@
         <div class="row row justify-content-md-center">
             <div sec:authorize="hasRole('DOCTOR')" class="col-md-3">
                 <label>Password:</label>
-                <input type="password" name="password" class="form-control" th:value="${user.password}"
+                <input type="password" name="password" class="form-control" th:value="*{password}"
                        placeholder="Password"/>
-                <label th:if="${#fields.hasErrors('user.password')}" th:errors="${user.password}" type="error"
+                <label th:if="${#fields.hasErrors('user.password')}" th:errors="*{password}" type="error"
                        class="error text-danger">
                     Error
                 </label>
                 <label th:if="${error_password} != null" class="error text-danger"
                        th:text="${error_password}"></label>
             </div>
-
 
             <div class="col-md-3" style="margin-left: 60px">
                 <label>Department</label>

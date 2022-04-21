@@ -16,7 +16,7 @@ public class AuthorityService {
     public Authority getByRole(String role) {
         var authority = authorityRepository.getByRole(role);
         if (Objects.isNull(authority)) {
-            throw new RuntimeException();
+            throw new RuntimeException("Role not found!");
         }
         return authority;
     }

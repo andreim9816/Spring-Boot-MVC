@@ -18,13 +18,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "USER_ID")
+    private Long identifier;
 
     @NotBlank(message = "Username must be provided!")
     private String username;
 
-    @NotBlank(message = "Password must be provided!")
-    @Length(min = 6, message = "Password should have minimum 6 characters!")
+//    @NotBlank(message = "Password must be provided!")
+//    @Length(min = 6, message = "Password should have minimum 6 characters!")
     private String password;
 
     @NotBlank(message = "Email must be provided!")
@@ -33,8 +34,8 @@ public class User {
     @Singular
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "authority_id"))
     private Set<Authority> authorities;
 
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +26,10 @@ public class ConsultService {
 
     public Page<Consult> getConsultsByDoctorId(Pageable pageable, Long doctorId) {
         return consultRepository.getConsultsByDoctorId(doctorId, pageable);
+    }
+
+    public List<Consult> getConsultsByDoctorId(Long doctorId) {
+        return consultRepository.getConsultsByDoctorId(doctorId);
     }
 
     public Consult getConsultById(Long id) {

@@ -4,17 +4,21 @@ import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Department;
 import com.example.project.repository.DepartmentRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
+
+    @Autowired
+    public DepartmentService(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
 
     public List<Department> getAllDepartments() {
         return departmentRepository.findAll();

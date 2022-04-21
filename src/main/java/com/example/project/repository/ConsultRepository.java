@@ -13,5 +13,7 @@ public interface ConsultRepository extends JpaRepository<Consult, Long> {
 
     List<Consult> getConsultsByDoctorIdAndPatientId(Long doctorId, Long patientId);
 
+    List<Consult> getConsultsByDoctorId(Long doctorId);
+
     Page<Consult> getConsultsByDoctorId(Long doctorId, Pageable page);
 }

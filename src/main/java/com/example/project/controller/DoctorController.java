@@ -76,7 +76,9 @@ public class DoctorController {
             model.addAttribute("doctor", doctor);
         }
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
-        return "doctors_form_2";
+        model.addAttribute("isDoctor", true);
+
+        return "doctor_form_2";
     }
 
     @GetMapping("/{id}/edit")
@@ -101,16 +103,20 @@ public class DoctorController {
         if (!model.containsAttribute("doctor")) {
             model.addAttribute("doctor", doctor);
         }
+
+        model.addAttribute("password", "");
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
+        model.addAttribute("isDoctor", false);
 
         //todo change view-ul de add-edit-doctor sa contina fieldurile bune
         // todo
-        return "doctors_form_2";
+        return "doctor_form_2";
     }
 
     @PostMapping
     public String saveOrUpdate(@ModelAttribute("user") @Valid User user, BindingResult bindingResultUser,
                                @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResultDoctor,
+                               @ModelAttribute("password") String password, BindingResult bindingResultPassword,
                                RedirectAttributes attr) {
         if (bindingResultUser.hasErrors() || bindingResultDoctor.hasErrors()) {
             attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
@@ -126,7 +132,7 @@ public class DoctorController {
         doctor.setUser(user);
 
         try {
-            userService.saveOrUpdateUser(user);
+            doctorService.saveOrUpdateUser(user, doctor, password);
         } catch (NotUniqueEmailException e) {
             attr.addFlashAttribute(BINDING_RESULT_PATH + "user", bindingResultUser);
             attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
