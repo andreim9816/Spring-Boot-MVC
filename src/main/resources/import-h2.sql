@@ -38,10 +38,10 @@ insert into medication(medication_id, name, quantity) values(7, 'Paracetamol', 1
 insert into medication(medication_id, name, quantity) values(8, 'Vitamnia C', 1000);
 
 -- consults
-insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(1,'2022-03-04', '-', 'Durere de cap, febra', '-', 1, 1);
-insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(2,'2022-03-01', '-', 'Greata, ameteala', '-', 2, 2);
-insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(3,'2022-03-13', '-', 'Insomnii, balonare, ameteala', '-', 2, 2);
-insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(4,'2022-03-20', 'Traumatism cerebral', 'Nu poate merge drept, ameteli, greturi. Usoare sangerare', '-', 6, 4);
+insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(1,STR_TO_DATE('2022-03-04', '%Y-%m-%d'), '-', 'Durere de cap, febra', '-', 1, 1);
+insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(2,STR_TO_DATE('2022-03-01', '%Y-%m-%d'), '-', 'Greata, ameteala', '-', 2, 2);
+insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(3,STR_TO_DATE('2022-03-13', '%Y-%m-%d'), '-', 'Insomnii, balonare, ameteala', '-', 2, 2);
+insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(4,STR_TO_DATE('2022-03-20', '%Y-%m-%d'), 'Traumatism cerebral', 'Nu poate merge drept, ameteli, greturi. Usoare sangerare', '-', 6, 4);
 
 
 -- prescriptions

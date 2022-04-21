@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 //@Profile("h2")
-@Profile("mysql")
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//@Profile("mysql")
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public static final String ADMIN = "ADMIN";
     public static final String DOCTOR = "DOCTOR";

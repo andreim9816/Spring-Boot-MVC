@@ -4,6 +4,7 @@ import com.example.project.exception.CustomException;
 import com.example.project.model.Department;
 import com.example.project.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/departments")
 @RequiredArgsConstructor
+@Slf4j
 public class DepartmentController {
     public final static String REDIRECT = "redirect:/";
     public final static String BINDING_RESULT_PATH = "org.springframework.validation.BindingResult.";
@@ -65,12 +67,16 @@ public class DepartmentController {
     @PostMapping
     public String saveOrUpdateDepartment(@ModelAttribute("department") @Valid Department department, BindingResult bindingResult, RedirectAttributes attr) {
         if (bindingResult.hasErrors()) {
+            log.info("Model binding has errors!");
+
             attr.addFlashAttribute(BINDING_RESULT_PATH + "department", bindingResult);
             attr.addFlashAttribute("department", department);
 
             if (department.getId() != null) {
+                log.info(String.format("Redirected back to endpoint %s", ALL_DEPARTMENTS + "/" + department.getId() + "/edit"));
                 return REDIRECT + ALL_DEPARTMENTS + "/" + department.getId() + "/edit";
             } else {
+                log.info(String.format("Redirected back to endpoint %s", ALL_DEPARTMENTS + "/new"));
                 return REDIRECT + ALL_DEPARTMENTS + "/new";
             }
         }
@@ -78,13 +84,17 @@ public class DepartmentController {
         try {
             departmentService.saveDepartment(department);
         } catch (CustomException e) {
+            log.info("Error when saving into database! Error message = " + e.getMessage());
+
             attr.addFlashAttribute(BINDING_RESULT_PATH + "department", bindingResult);
             attr.addFlashAttribute("department", department);
             attr.addFlashAttribute("error_department", e.getMessage());
 
             if (department.getId() == null) {
+                log.info(String.format("Redirected back to endpoint %s", ALL_DEPARTMENTS + "/new"));
                 return REDIRECT + ALL_DEPARTMENTS + "/new";
             } else {
+                log.info(String.format("Redirected back to endpoint %s", ALL_DEPARTMENTS + "/" + department.getId() + "/edit"));
                 return REDIRECT + ALL_DEPARTMENTS + "/" + department.getId() + "/edit";
             }
         }

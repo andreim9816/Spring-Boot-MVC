@@ -47,7 +47,8 @@ public class ConsultController {
     private final UserService userService;
 
     @GetMapping
-    public String getAll(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page,
+    public String getAll(Model model,
+                         @RequestParam(value = "page", defaultValue = "1") Integer page,
                          @RequestParam(value = "size", defaultValue = "10") Integer size,
                          @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         var consults = consultService.getAllConsults(PageRequest.of(page - 1, size, Sort.by(sortBy)));
@@ -58,12 +59,15 @@ public class ConsultController {
     }
 
     @GetMapping("/my-consults")
-    public String getMyConsults(Model model, @RequestParam(value = "page", defaultValue = "1") Integer page,
+    public String getMyConsults(Model model,
+                                @RequestParam(value = "page", defaultValue = "1") Integer page,
                                 @RequestParam(value = "size", defaultValue = "10") Integer size,
                                 @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
         var myDoctorId = userService.getCurrentUser().getDoctor().getId();
         var myConsults = consultService.getConsultsByDoctorId(PageRequest.of(page - 1, size, Sort.by(sortBy)), myDoctorId);
         model.addAttribute("consults", myConsults);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("page", page);
         return MY_CONSULTS;
     }
 

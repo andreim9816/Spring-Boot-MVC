@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.Set;
 
-import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
+import static com.example.project.configuration.SecurityConfiguration.ROLE_DOCTOR;
 import static com.example.project.controller.DepartmentController.BINDING_RESULT_PATH;
 import static com.example.project.controller.DepartmentController.REDIRECT;
 

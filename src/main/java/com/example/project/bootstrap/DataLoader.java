@@ -3,17 +3,19 @@ package com.example.project.bootstrap;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
+import com.example.project.repository.AddressRepository;
+import com.example.project.repository.MedicationRepository;
+import com.example.project.repository.PatientRepository;
 import com.example.project.repository.security.AuthorityRepository;
 import com.example.project.repository.security.UserRepository;
 import com.example.project.service.DoctorService;
-import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import static com.example.project.configuration.SecurityConfig.ROLE_ADMIN;
-import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
+import static com.example.project.configuration.SecurityConfiguration.ROLE_ADMIN;
+import static com.example.project.configuration.SecurityConfiguration.ROLE_DOCTOR;
 
 @RequiredArgsConstructor
 @Component

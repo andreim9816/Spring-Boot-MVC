@@ -15,11 +15,11 @@
     <table class="table table-striped table-hover ">
         <thead class="thead-inverse">
         <tr>
-            <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=id'}">ID</a></th>
-            <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=patient.lastName'}">Patient</a></th>
-            <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=doctor.lastName'}">Doctor</a></th>
-            <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=date'}">Date</a></th>
-            <th><a th:href="@{'/consults?page=' + ${page} + '&sortBy=diagnose'}">Diagnose</a></th>
+            <th><a th:href="@{'/consults/my-consults?page=' + ${page} + '&sortBy=id'}">ID</a></th>
+            <th><a th:href="@{'/consults/my-consults?page=' + ${page} + '&sortBy=patient.lastName'}">Patient</a></th>
+            <th><a th:href="@{'/consults/my-consults?page=' + ${page} + '&sortBy=doctor.lastName'}">Doctor</a></th>
+            <th><a th:href="@{'/consults/my-consults?page=' + ${page} + '&sortBy=date'}">Date</a></th>
+            <th><a th:href="@{'/consults/my-consults?page=' + ${page} + '&sortBy=diagnose'}">Diagnose</a></th>
             <th>Details</th>
             <th>Edit</th>
         </tr>

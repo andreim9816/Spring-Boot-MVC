@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
+import static com.example.project.configuration.SecurityConfiguration.ROLE_DOCTOR;
 
 @Service
 @RequiredArgsConstructor

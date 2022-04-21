@@ -1,7 +1,5 @@
 package com.example.project.controller;
 
-import com.example.project.exception.NotUniqueEmailException;
-import com.example.project.exception.NotUniqueUsernameException;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.User;
 import com.example.project.service.DepartmentService;
@@ -9,18 +7,11 @@ import com.example.project.service.security.AuthorityService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.util.Set;
-
-import static com.example.project.configuration.SecurityConfig.ROLE_DOCTOR;
 import static com.example.project.controller.DepartmentController.*;
 
 @Controller
@@ -32,7 +23,7 @@ public class HomeController {
     private final static String REGISTER = "register";
     private final static String LOGIN = "login";
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final DepartmentService departmentService;
     private final AuthorityService authorityService;
     private final UserService userService;
