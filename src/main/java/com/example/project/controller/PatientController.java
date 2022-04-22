@@ -3,8 +3,8 @@ package com.example.project.controller;
 import com.example.project.exception.CustomException;
 import com.example.project.model.Address;
 import com.example.project.model.Patient;
-import com.example.project.service.DepartmentService;
-import com.example.project.service.PatientService;
+import com.example.project.service.DepartmentServiceImpl;
+import com.example.project.service.PatientServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -28,8 +28,8 @@ public class PatientController {
     private final static String VIEW_PATIENT = "patient_info";
     private final static String ADD_EDIT_PATIENT = "patient_form";
 
-    private final PatientService patientService;
-    private final DepartmentService departmentService;
+    private final PatientServiceImpl patientService;
+    private final DepartmentServiceImpl departmentService;
 
     @GetMapping
     public String getAll(Model model) {

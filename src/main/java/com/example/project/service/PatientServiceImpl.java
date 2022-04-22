@@ -5,7 +5,7 @@ import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Consult;
 import com.example.project.model.Patient;
 import com.example.project.repository.PatientRepository;
-import lombok.AllArgsConstructor;
+import com.example.project.service.interfaces.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PatientService {
+public class PatientServiceImpl implements PatientService {
 
     private final PatientRepository patientRepository;
 
@@ -27,15 +27,6 @@ public class PatientService {
                         .entityId(patientId)
                         .entityType("Patient")
                         .build());
-    }
-
-    public List<Consult> getConsultsForPatient(Long patientId) {
-        Patient patient = getPatientById(patientId);
-        return getConsultsForPatient(patient);
-    }
-
-    private List<Consult> getConsultsForPatient(Patient patient) {
-        return patient.getConsults();
     }
 
     public Patient savePatient(Patient patient) {

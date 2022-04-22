@@ -13,6 +13,6 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
 
     Optional<Medication> findMedicationByNameAndQuantity(String name, Integer quantity);
 
-    @Query("select med FROM Medication med where med.id in (:ids)")
-    List<Medication> findMedicationsByIdContains(List<Long> ids);
+//    @Query("select med FROM Medication med where med.id in (:ids)")
+    List<Medication> findByIdIsIn(List<Long> ids);
 }

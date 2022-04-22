@@ -22,7 +22,6 @@ public class Department {
 
     @NotBlank(message = "Department name must be provided!")
     @Pattern(regexp = NAME_REGEX, message = "Department name is invalid!")
-//    @UniqueDepartmentName(message = "Department name already exists!")
     private String name;
 
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)

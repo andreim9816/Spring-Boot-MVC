@@ -4,6 +4,7 @@ import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Department;
 import com.example.project.repository.DepartmentRepository;
+import com.example.project.service.interfaces.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class DepartmentService {
+public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
     @Autowired
-    public DepartmentService(DepartmentRepository departmentRepository) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
     }
 

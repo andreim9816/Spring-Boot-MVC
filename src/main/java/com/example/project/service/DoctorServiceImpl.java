@@ -7,6 +7,7 @@ import com.example.project.model.Consult;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.User;
 import com.example.project.repository.DoctorRepository;
+import com.example.project.service.interfaces.DoctorService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +20,10 @@ import static com.example.project.service.security.UserService.isLoggedIn;
 
 @Service
 @RequiredArgsConstructor
-public class DoctorService {
+public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
-    private final ConsultService consultService;
+    private final ConsultServiceImpl consultService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
@@ -57,7 +58,7 @@ public class DoctorService {
 
         doctor.setConsults(getAllConsultsForDoctor(doctor.getId()));
 
-        if(!isLoggedIn()){
+        if (!isLoggedIn()) {
             // register form
             doctor.setUser(user);
             user.setDoctor(doctor);

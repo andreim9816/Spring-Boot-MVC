@@ -4,8 +4,8 @@ import com.example.project.exception.NotUniqueEmailException;
 import com.example.project.exception.NotUniqueUsernameException;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.User;
-import com.example.project.service.DepartmentService;
-import com.example.project.service.DoctorService;
+import com.example.project.service.DepartmentServiceImpl;
+import com.example.project.service.DoctorServiceImpl;
 import com.example.project.service.security.AuthorityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,9 +33,9 @@ public class HomeController {
     private final static String LOGIN = "login";
 
     private final PasswordEncoder passwordEncoder;
-    private final DepartmentService departmentService;
+    private final DepartmentServiceImpl departmentService;
     private final AuthorityService authorityService;
-    private final DoctorService doctorService;
+    private final DoctorServiceImpl doctorService;
 
     @GetMapping({"", "/", "/index"})
     public String departmentList(Model model) {

@@ -2,7 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.exception.CustomException;
 import com.example.project.model.Department;
-import com.example.project.service.DepartmentService;
+import com.example.project.service.DepartmentServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class DepartmentController {
     private final static String ADD_EDIT_DEPARTMENT = "department_form";
 
 
-    private final DepartmentService departmentService;
+    private final DepartmentServiceImpl departmentService;
 
     @GetMapping(value = {"", "/", "/index"})
     public String getAll(Model model) {

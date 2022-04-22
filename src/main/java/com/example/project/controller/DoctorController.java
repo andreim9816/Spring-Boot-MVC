@@ -4,8 +4,8 @@ import com.example.project.exception.NotUniqueEmailException;
 import com.example.project.exception.NotUniqueUsernameException;
 import com.example.project.model.Doctor;
 import com.example.project.model.security.User;
-import com.example.project.service.DepartmentService;
-import com.example.project.service.DoctorService;
+import com.example.project.service.DepartmentServiceImpl;
+import com.example.project.service.DoctorServiceImpl;
 import com.example.project.service.security.AuthorityService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +33,8 @@ public class DoctorController {
     private final static String VIEW_DOCTOR = "doctor_info";
     private final static String EDIT_DOCTOR = "doctor_form";
 
-    private final DoctorService doctorService;
-    private final DepartmentService departmentService;
+    private final DoctorServiceImpl doctorService;
+    private final DepartmentServiceImpl departmentService;
     private final UserService userService;
     private final AuthorityService authorityService;
 

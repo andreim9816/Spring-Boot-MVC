@@ -4,6 +4,7 @@ import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Consult;
 import com.example.project.repository.ConsultRepository;
+import com.example.project.service.interfaces.ConsultService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ConsultService {
+public class ConsultServiceImpl implements ConsultService {
 
     private final ConsultRepository consultRepository;
     private final UserService userService;

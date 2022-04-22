@@ -4,6 +4,7 @@ import com.example.project.exception.CustomException;
 import com.example.project.exception.EntityNotFoundException;
 import com.example.project.model.Medication;
 import com.example.project.repository.MedicationRepository;
+import com.example.project.service.interfaces.MedicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MedicationService {
+public class MedicationServiceImpl implements MedicationService {
 
     private final MedicationRepository medicationRepository;
 
@@ -42,7 +43,7 @@ public class MedicationService {
     }
 
     public List<Medication> findMedicationsByIdContains(List<Long> ids) {
-        return medicationRepository.findMedicationsByIdContains(ids);
+        return medicationRepository.findByIdIsIn(ids);
     }
 
     public void deleteMedicationById(Long id) {

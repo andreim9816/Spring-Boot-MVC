@@ -5,7 +5,7 @@ import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
 import com.example.project.repository.security.AuthorityRepository;
 import com.example.project.repository.security.UserRepository;
-import com.example.project.service.DoctorService;
+import com.example.project.service.DoctorServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +21,7 @@ public class DataLoader implements CommandLineRunner {
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final DoctorService doctorService;
+    private final DoctorServiceImpl doctorService;
 
     private void loadUserData() {
         if (userRepository.count() == 0) {

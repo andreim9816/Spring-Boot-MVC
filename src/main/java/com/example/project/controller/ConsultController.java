@@ -6,10 +6,10 @@ import com.example.project.model.Doctor;
 import com.example.project.model.Medication;
 import com.example.project.model.Patient;
 import com.example.project.model.dto.SelectedMedication;
-import com.example.project.service.ConsultService;
-import com.example.project.service.DoctorService;
-import com.example.project.service.MedicationService;
-import com.example.project.service.PatientService;
+import com.example.project.service.ConsultServiceImpl;
+import com.example.project.service.DoctorServiceImpl;
+import com.example.project.service.MedicationServiceImpl;
+import com.example.project.service.PatientServiceImpl;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,10 +42,10 @@ public class ConsultController {
     private final static String VIEW_CONSULT = "consult_info";
     private final static String ADD_EDIT_CONSULT = "consult_form";
 
-    private final ConsultService consultService;
-    private final DoctorService doctorService;
-    private final MedicationService medicationService;
-    private final PatientService patientService;
+    private final ConsultServiceImpl consultService;
+    private final DoctorServiceImpl doctorService;
+    private final MedicationServiceImpl medicationService;
+    private final PatientServiceImpl patientService;
     private final UserService userService;
 
     @GetMapping

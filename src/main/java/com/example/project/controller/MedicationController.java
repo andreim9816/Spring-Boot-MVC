@@ -2,7 +2,7 @@ package com.example.project.controller;
 
 import com.example.project.exception.CustomException;
 import com.example.project.model.Medication;
-import com.example.project.service.MedicationService;
+import com.example.project.service.MedicationServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,7 +26,7 @@ public class MedicationController {
     private final static String VIEW_MEDICATION = "medication_info";
     private final static String ADD_EDIT_MEDICATION = "medication_form";
 
-    private final MedicationService medicationService;
+    private final MedicationServiceImpl medicationService;
 
     @GetMapping
     public String getAll(Model model) {
