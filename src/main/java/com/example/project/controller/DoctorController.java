@@ -31,7 +31,7 @@ public class DoctorController {
 
     private final static String ALL_DOCTORS = "doctors";
     private final static String VIEW_DOCTOR = "doctor_info";
-    private final static String EDIT_DOCTOR = "doctor_form_2";
+    private final static String EDIT_DOCTOR = "doctor_form";
 
     private final DoctorService doctorService;
     private final DepartmentService departmentService;
@@ -69,6 +69,7 @@ public class DoctorController {
         }
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
         model.addAttribute("isDoctor", true);
+        model.addAttribute("password", "");
 
         return EDIT_DOCTOR;
     }
@@ -108,8 +109,7 @@ public class DoctorController {
     @PostMapping
     public String saveOrUpdate(@ModelAttribute("user") @Valid User user, BindingResult bindingResultUser,
                                @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResultDoctor,
-                               @ModelAttribute("password") String password, BindingResult bindingResultPassword,
-                               RedirectAttributes attr) {
+                               @ModelAttribute("password") String password, RedirectAttributes attr) {
         if (bindingResultUser.hasErrors() || bindingResultDoctor.hasErrors()) {
             log.info("Model binding has errors!");
 
@@ -118,7 +118,15 @@ public class DoctorController {
             attr.addFlashAttribute("user", user);
             attr.addFlashAttribute("doctor", doctor);
 
-            return REDIRECT + ALL_DOCTORS + "/" + doctor.getId() + "/edit";
+            if (bindingResultUser.getFieldError("password") != null) {
+                attr.addFlashAttribute("error_password", bindingResultUser.getFieldError("password").getDefaultMessage());
+            }
+
+            if (userService.isDoctor()) {
+                return REDIRECT + ALL_DOCTORS + "/my-profile";
+            } else {
+                return REDIRECT + ALL_DOCTORS + "/" + doctor.getId() + "/edit";
+            }
         }
 
         user.setAuthorities(Set.of(authorityService.getByRole(ROLE_DOCTOR)));

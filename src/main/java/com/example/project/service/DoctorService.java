@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.project.service.security.UserService.isLoggedIn;
+
 @Service
 @RequiredArgsConstructor
 public class DoctorService {
@@ -55,6 +57,13 @@ public class DoctorService {
 
         doctor.setConsults(getAllConsultsForDoctor(doctor.getId()));
 
+        if(!isLoggedIn()){
+            // register form
+            doctor.setUser(user);
+            user.setDoctor(doctor);
+            return saveDoctor(doctor).getUser();
+
+        }
         if (userService.isAdmin()) {
             // admins can't change passwords
             var doctorInDB = getById(user.getDoctor().getId());

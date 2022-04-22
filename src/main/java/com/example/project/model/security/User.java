@@ -24,8 +24,8 @@ public class User {
     @NotBlank(message = "Username must be provided!")
     private String username;
 
-//    @NotBlank(message = "Password must be provided!")
-//    @Length(min = 6, message = "Password should have minimum 6 characters!")
+    @NotBlank(message = "Password must be provided!")
+    @Length(min = 6, message = "Password should have minimum 6 characters!")
     private String password;
 
     @NotBlank(message = "Email must be provided!")

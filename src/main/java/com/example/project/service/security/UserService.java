@@ -45,14 +45,6 @@ public class UserService {
         return Objects.equals(doctorId, getCurrentUser().getDoctor().getId());
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
