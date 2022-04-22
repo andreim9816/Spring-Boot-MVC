@@ -20,11 +20,8 @@ insert into patient(PATIENT_ID, FIRST_NAME, LAST_NAME, cnp, FK_DEPARTMENT_ID, FK
 -- doctors
 
 insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (1, 'Victor', 'Firastrau', 1, null);
-insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (2, 'Eugen', 'Mocanu', 1, null);
-insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (3, 'Ana', 'Asmarandei', 1, null);
-insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (4, 'Alina', 'Tura', 2, null);
-insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (5, 'Madalina', 'Dumitriu', 3, null);
-insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (6, 'Andreea', 'Petre', 3, null);
+insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (2, 'Eugen', 'Mocanu', 2, null);
+insert into doctor(doctor_id, first_name, last_name, fk_department_id,FK_USER_ID) values (3, 'Ana', 'Asmarandei', 2, null);
 
 -- medications
 
@@ -41,7 +38,7 @@ insert into medication(medication_id, name, quantity) values(8, 'Vitamnia C', 10
 insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(1,'2022-03-04', '-', 'Durere de cap, febra', '-', 1, 1);
 insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(2,'2022-03-01', '-', 'Greata, ameteala', '-', 2, 2);
 insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(3,'2022-03-13', '-', 'Insomnii, balonare, ameteala', '-', 2, 2);
-insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(4,'2022-03-20', 'Traumatism cerebral', 'Nu poate merge drept, ameteli, greturi. Usoare sangerare', '-', 6, 4);
+insert into consult(CONSULT_ID, date, diagnose, symptoms, comment, FK_DOCTOR_ID, FK_PATIENT_ID) values(4,'2022-03-20', 'Traumatism cerebral', 'Nu poate merge drept, ameteli, greturi. Usoare sangerare', '-', 3, 4);
 
 
 -- prescriptions

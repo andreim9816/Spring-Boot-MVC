@@ -3,7 +3,6 @@ package com.example.project.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,8 +13,6 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
-//@Profile("h2")
-//@Profile("mysql")
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public static final String ADMIN = "ADMIN";
@@ -58,7 +55,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/patients/{^[0-9]+}").hasAnyRole(ADMIN, DOCTOR)
                 .antMatchers("/patients").hasAnyRole(ADMIN, DOCTOR)
 
-//                .antMatchers("/doctors/new", "/doctors/{^[0-9]+}/edit").hasRole(ADMIN)
                 .antMatchers("/doctors/{^[0-9]+}/edit").hasAnyRole(DOCTOR, ADMIN)
                 .antMatchers("/doctors/my-profile").hasRole(DOCTOR)
                 .antMatchers("/doctors/{^[0-9]+}").permitAll()

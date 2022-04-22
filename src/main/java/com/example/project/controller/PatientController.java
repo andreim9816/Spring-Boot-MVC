@@ -3,10 +3,10 @@ package com.example.project.controller;
 import com.example.project.exception.CustomException;
 import com.example.project.model.Address;
 import com.example.project.model.Patient;
-import com.example.project.service.AddressService;
 import com.example.project.service.DepartmentService;
 import com.example.project.service.PatientService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +21,7 @@ import static com.example.project.controller.DepartmentController.REDIRECT;
 @Controller
 @RequestMapping("/patients")
 @RequiredArgsConstructor
+@Slf4j
 public class PatientController {
 
     private final static String ALL_PATIENTS = "patients";
@@ -29,7 +30,6 @@ public class PatientController {
 
     private final PatientService patientService;
     private final DepartmentService departmentService;
-    private final AddressService addressService;
 
     @GetMapping
     public String getAll(Model model) {
@@ -79,6 +79,7 @@ public class PatientController {
                                @ModelAttribute("address") @Valid Address address, BindingResult bindingResultAddress,
                                RedirectAttributes attr) {
         if (bindingResultPatient.hasErrors() || bindingResultAddress.hasErrors()) {
+            log.info("Model binding has errors!");
 
             attr.addFlashAttribute(BINDING_RESULT_PATH + "patient", bindingResultPatient);
             attr.addFlashAttribute(BINDING_RESULT_PATH + "address", bindingResultAddress);
@@ -86,8 +87,10 @@ public class PatientController {
             attr.addFlashAttribute("address", address);
 
             if (patient.getId() != null) {
+                log.info(String.format("Redirected back to endpoint %s", ALL_PATIENTS + "/" + patient.getId() + "/edit"));
                 return REDIRECT + ALL_PATIENTS + "/" + patient.getId() + "/edit";
             } else {
+                log.info(String.format("Redirected back to endpoint %s", ALL_PATIENTS + "/new"));
                 return REDIRECT + ALL_PATIENTS + "/new";
             }
         }
@@ -99,13 +102,17 @@ public class PatientController {
             patientService.savePatient(patient);
 //        addressService.saveAddress(address);
         } catch (CustomException e) {
+            log.info("Error when saving into database! Error message = " + e.getMessage());
+
             attr.addFlashAttribute(BINDING_RESULT_PATH + "patient", bindingResultPatient);
             attr.addFlashAttribute("patient", patient);
             attr.addFlashAttribute("error_cnp", e.getMessage());
 
             if (patient.getId() == null) {
+                log.info(String.format("Redirected back to endpoint %s", ALL_PATIENTS + "/new"));
                 return REDIRECT + ALL_PATIENTS + "/new";
             } else {
+                log.info(String.format("Redirected back to endpoint %s", ALL_PATIENTS + "/" + patient.getId() + "/edit"));
                 return REDIRECT + ALL_PATIENTS + "/" + patient.getId() + "/edit";
             }
         }

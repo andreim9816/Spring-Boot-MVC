@@ -12,6 +12,7 @@ import com.example.project.service.MedicationService;
 import com.example.project.service.PatientService;
 import com.example.project.service.security.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,7 @@ import static com.example.project.controller.DepartmentController.REDIRECT;
 @Controller
 @RequestMapping("/consults")
 @RequiredArgsConstructor
+@Slf4j
 public class ConsultController {
 
     private final static String ALL_CONSULTS = "consults";
@@ -186,6 +188,8 @@ public class ConsultController {
     @PostMapping
     public String saveOrUpdateConsult(@ModelAttribute("consult") @Valid Consult consult, BindingResult bindingResult, RedirectAttributes attr) {
         if (bindingResult.hasErrors()) {
+            log.info("Model binding has errors!");
+
             attr.addFlashAttribute(BINDING_RESULT_PATH + "consult", bindingResult);
             attr.addFlashAttribute("consult", consult);
 
@@ -199,6 +203,8 @@ public class ConsultController {
         try {
             consultService.saveConsult(consult);
         } catch (CustomException e) {
+            log.info("Error when saving into database! Error message = " + e.getMessage());
+
             attr.addFlashAttribute(BINDING_RESULT_PATH + "consult", bindingResult);
             attr.addFlashAttribute("consult", consult);
             attr.addFlashAttribute("error_date", e.getMessage());
