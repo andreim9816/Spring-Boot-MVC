@@ -2,7 +2,6 @@ package com.example.project.model.security;
 
 import com.example.project.model.Doctor;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,8 +23,6 @@ public class User {
     @NotBlank(message = "Username must be provided!")
     private String username;
 
-    @NotBlank(message = "Password must be provided!")
-    @Length(min = 6, message = "Password should have minimum 6 characters!")
     private String password;
 
     @NotBlank(message = "Email must be provided!")
@@ -51,6 +48,6 @@ public class User {
     @Builder.Default
     private Boolean credentialsNotExpired = true;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Doctor doctor;
 }

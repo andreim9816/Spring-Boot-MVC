@@ -1,16 +1,16 @@
 package com.example.project.service.security;
 
 import com.example.project.exception.EntityNotFoundException;
-import com.example.project.model.security.Authority;
 import com.example.project.model.security.User;
 import com.example.project.repository.security.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,8 +33,16 @@ public class UserService {
     }
 
     public boolean isDoctor() {
-        return getCurrentUser().getAuthorities().stream()
-                .map(Authority::getRole).collect(Collectors.toList()).contains(ROLE_DOCTOR);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails) {
+//            Collection<Authority> authorities = (Collection<Authority>) ((UserDetails) principal).getAuthorities();
+//            return authorities.stream().map(Authority::getRole).collect(Collectors.toList()).contains(ROLE_DOCTOR);
+
+            var authorities = (Collection<SimpleGrantedAuthority>) ((UserDetails) principal).getAuthorities();
+            return authorities.stream().map(SimpleGrantedAuthority::getAuthority).collect(Collectors.toList()).contains(ROLE_DOCTOR);
+        }
+        return false;
     }
 
     public boolean isAdmin() {

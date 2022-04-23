@@ -30,7 +30,7 @@ public class Doctor extends Person {
     @JoinColumn(name = "FK_DEPARTMENT_ID")
     private Department department;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "FK_USER_ID")
     private User user;
 }

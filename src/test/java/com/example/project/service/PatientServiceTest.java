@@ -108,4 +108,12 @@ public class PatientServiceTest {
         verify(patientRepository, times(0)).findById(1L);
         verify(patientRepository, times(0)).save(patient1);
     }
+
+    @Test
+    public void deletePatient() {
+        Long id = 1L;
+        doNothing().when(patientRepository).deleteById(id);
+        patientService.deletePatientById(id);
+        verify(patientRepository, times(1)).deleteById(id);
+    }
 }

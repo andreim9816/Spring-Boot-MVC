@@ -70,14 +70,15 @@ public class MedicationController {
 
             attr.addFlashAttribute(BINDING_RESULT_PATH + "medication", bindingResult);
             attr.addFlashAttribute("medication", medication);
+            return ADD_EDIT_MEDICATION;
 
-            if (medication.getId() != null) {
-                log.info(String.format("Redirected back to endpoint %s", ALL_MEDICATIONS + "/" + medication.getId() + "/edit"));
-                return REDIRECT + ALL_MEDICATIONS + "/" + medication.getId() + "/edit";
-            } else {
-                log.info(String.format("Redirected back to endpoint %s", ALL_MEDICATIONS + "/new"));
-                return REDIRECT + ALL_MEDICATIONS + "/new";
-            }
+//            if (medication.getId() != null) {
+//                log.info(String.format("Redirected back to endpoint %s", ALL_MEDICATIONS + "/" + medication.getId() + "/edit"));
+//                return REDIRECT + ALL_MEDICATIONS + "/" + medication.getId() + "/edit";
+//            } else {
+//                log.info(String.format("Redirected back to endpoint %s", ALL_MEDICATIONS + "/new"));
+//                return REDIRECT + ALL_MEDICATIONS + "/new";
+//            }
         }
 
         try {

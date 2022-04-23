@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import com.example.project.exception.ForbiddenException;
 import com.example.project.exception.NotUniqueEmailException;
 import com.example.project.exception.NotUniqueUsernameException;
 import com.example.project.model.Doctor;
@@ -78,7 +79,7 @@ public class DoctorController {
     public String editDoctor(@PathVariable("id") String doctorId, Model model) {
         if (userService.isDoctor()) {
             if (!userService.checkIfCurrentUserIsSameDoctor(Long.valueOf(doctorId))) {
-                return "access_denied";
+                throw new ForbiddenException();
             } else {
                 return REDIRECT + ALL_DOCTORS + "/my-profile";
             }
@@ -101,8 +102,6 @@ public class DoctorController {
         model.addAttribute("departmentAll", departmentService.getAllDepartments());
         model.addAttribute("isDoctor", false);
 
-        //todo change view-ul de add-edit-doctor sa contina fieldurile bune
-        // todo
         return EDIT_DOCTOR;
     }
 
@@ -110,6 +109,7 @@ public class DoctorController {
     public String saveOrUpdate(@ModelAttribute("user") @Valid User user, BindingResult bindingResultUser,
                                @ModelAttribute("doctor") @Valid Doctor doctor, BindingResult bindingResultDoctor,
                                @ModelAttribute("password") String password, RedirectAttributes attr) {
+
         if (bindingResultUser.hasErrors() || bindingResultDoctor.hasErrors()) {
             log.info("Model binding has errors!");
 
@@ -117,10 +117,6 @@ public class DoctorController {
             attr.addFlashAttribute(BINDING_RESULT_PATH + "doctor", bindingResultDoctor);
             attr.addFlashAttribute("user", user);
             attr.addFlashAttribute("doctor", doctor);
-
-            if (bindingResultUser.getFieldError("password") != null) {
-                attr.addFlashAttribute("error_password", bindingResultUser.getFieldError("password").getDefaultMessage());
-            }
 
             if (userService.isDoctor()) {
                 return REDIRECT + ALL_DOCTORS + "/my-profile";
@@ -157,7 +153,7 @@ public class DoctorController {
         return REDIRECT + ALL_DOCTORS;
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteDoctor(@PathVariable Long id) {
         doctorService.deleteDoctorById(id);
         return REDIRECT + ALL_DOCTORS;

@@ -75,9 +75,7 @@ public class ConsultController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getById(@PathVariable("id") String consultId) {
-        ModelAndView modelAndView = new ModelAndView(VIEW_CONSULT);
-
+    public String getById(@PathVariable("id") String consultId, Model model) {
         var consult = consultService.getConsultById(Long.valueOf(consultId));
         var selectedMedicationIds = consult.getMedications().stream().map(Medication::getId).collect(Collectors.toList());
         var medications = consult.getMedications().stream()
@@ -89,13 +87,13 @@ public class ConsultController {
         var doctorName = doctor.getLastName() + " " + doctor.getFirstName();
         var patientName = patient.getLastName() + " " + patient.getFirstName();
 
-        modelAndView.addObject("consult", consult);
-        modelAndView.addObject("doctorName", doctorName);
-        modelAndView.addObject("patientName", patientName);
-        modelAndView.addObject("medicationAll", medications);
-        modelAndView.addObject("selectedMedicationIds", selectedMedicationIds);
+        model.addAttribute("consult", consult);
+        model.addAttribute("doctorName", doctorName);
+        model.addAttribute("patientName", patientName);
+        model.addAttribute("medicationAll", medications);
+        model.addAttribute("selectedMedicationIds", selectedMedicationIds);
 
-        return modelAndView;
+        return VIEW_CONSULT;
     }
 
     @GetMapping("/new")

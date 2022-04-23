@@ -30,8 +30,9 @@
                 <label>Username:</label>
 
                 <div th:if="${isDoctor}">
-                    <p class="form-control" th:text="${user.username}"></p>
-                    <input type="hidden" th:field="*{user.username}" >
+                    <!--                    <input type="text" name="username" disabled class="form-control" th:field="*{user.username}"/>-->
+                    <p class="form-control" name="username" th:text="${user.username}"></p>
+                    <input type="hidden" th:field="*{user.username}">
                 </div>
 
                 <div th:unless="${isDoctor}">
