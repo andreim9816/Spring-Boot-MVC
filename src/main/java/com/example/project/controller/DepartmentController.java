@@ -3,8 +3,11 @@ package com.example.project.controller;
 import com.example.project.exception.CustomException;
 import com.example.project.model.Department;
 import com.example.project.service.DepartmentServiceImpl;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @Controller
+@Setter
 @RequestMapping("/departments")
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Slf4j
 public class DepartmentController {
     public final static String REDIRECT = "redirect:/";
@@ -26,8 +30,8 @@ public class DepartmentController {
     private final static String VIEW_DEPARTMENT = "department_info";
     private final static String ADD_EDIT_DEPARTMENT = "department_form";
 
-
-    private final DepartmentServiceImpl departmentService;
+    @Autowired
+    private DepartmentServiceImpl departmentService;
 
     @GetMapping(value = {"", "/", "/index"})
     public String getAll(Model model) {
@@ -36,13 +40,11 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getById(@PathVariable("id") String departmentId) {
-        ModelAndView modelAndView = new ModelAndView(VIEW_DEPARTMENT);
-
+    public String getById(@PathVariable("id") String departmentId, Model model) {
         var department = departmentService.getDepartmentById(Long.valueOf(departmentId));
-        modelAndView.addObject("department", department);
+        model.addAttribute("department", department);
 
-        return modelAndView;
+        return VIEW_DEPARTMENT;
     }
 
     @GetMapping("/new")
@@ -102,10 +104,9 @@ public class DepartmentController {
         return REDIRECT + ALL_DEPARTMENTS;
     }
 
-    @DeleteMapping("/{id}")
-    public ModelAndView deleteDepartment(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView(REDIRECT + ALL_DEPARTMENTS);
+    @GetMapping("/{id}/delete")
+    public String deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartmentById(id);
-        return modelAndView;
+        return REDIRECT + ALL_DEPARTMENTS;
     }
 }

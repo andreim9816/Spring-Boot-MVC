@@ -25,91 +25,9 @@ public class GlobalExceptionAdvice {
         return modelAndView;
     }
 
-    //
-//    /* PathVariab validation */
-//    @ExceptionHandler(ConstraintViolationException.class)
-//    public ResponseEntity<List<ErrorBody>> handle(ConstraintViolationException e) {
-//        return new ResponseEntity<>(
-//                e.getConstraintViolations().stream()
-//                        .map(ex -> ErrorBody.builder()
-//                                .message(ex.getMessage())
-//                                .build()
-//                        )
-//                        .collect(Collectors.toList()),
-//                HttpStatus.NOT_FOUND
-//        );
-//    }
-//
-//    /* ReqDto field validation */
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<List<ErrorBody>> handle(MethodArgumentNotValidException e) {
-//        return new ResponseEntity<>(
-//                e.getBindingResult().getFieldErrors().stream()
-//                        .map(ex -> ErrorBody.builder()
-//                                .message(ex.getDefaultMessage())
-//                                .build()
-//                        )
-//                        .collect(Collectors.toList()),
-//                HttpStatus.BAD_REQUEST
-//        );
-//    }
-//
-//    @ExceptionHandler(CustomException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ModelAndView handle(CustomException e) {
-//        ModelAndView modelAndView = new ModelAndView("error_default");
-//
-//        var error = ErrorBody.builder()
-//                .message(e.getMessage())
-//                .build();
-//        //todo log error
-//        modelAndView.addObject("exception", error);
-//        return modelAndView;
-//    }
-//
-//    @ExceptionHandler(ValidationException.class)
-//    public ResponseEntity<ErrorBody> handle(ValidationException e) {
-//        return new ResponseEntity<>(
-//                ErrorBody.builder()
-//                        .message(BAD_REQUEST_MESSAGE)
-//                        .build(),
-//                HttpStatus.BAD_REQUEST
-//        );
-//    }
-//
-//    /* Postman invalid params (eg passing null to path variables) */
-//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-//    public ResponseEntity<ErrorBody> handle(MethodArgumentTypeMismatchException e) {
-//        return new ResponseEntity<>(
-//                ErrorBody.builder()
-//                        .message(BAD_REQUEST_MESSAGE)
-//                        .build(),
-//                HttpStatus.BAD_REQUEST
-//        );
-//    }
-//
-//
-
-//    @ExceptionHandler(Exception.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ModelAndView handle(Exception e) {
-//        ModelAndView modelAndView = new ModelAndView("error_default");
-//
-//        var error = ErrorBody.builder()
-//                .message(DEFAULT_MESSAGE)
-//                .build();
-//        //todo log error
-//        modelAndView.addObject("exception", error);
-//        return modelAndView;
-//    }
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorBody> handle(Exception e) {
-//        return new ResponseEntity<>(
-//                ErrorBody.builder()
-//                        .message(DEFAULT_MESSAGE)
-//                        .build(),
-//                HttpStatus.INTERNAL_SERVER_ERROR
-//        );
-//    }
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ModelAndView handle(ForbiddenException e) {
+        return new ModelAndView("access_denied");
+    }
 }

@@ -101,7 +101,7 @@ public class MedicationController {
         return REDIRECT + ALL_MEDICATIONS;
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteMedication(@PathVariable Long id) {
         medicationService.deleteMedicationById(id);
         return REDIRECT + ALL_MEDICATIONS;

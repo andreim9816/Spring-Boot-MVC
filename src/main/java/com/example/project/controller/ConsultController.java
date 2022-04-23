@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import com.example.project.exception.CustomException;
+import com.example.project.exception.ForbiddenException;
 import com.example.project.model.Consult;
 import com.example.project.model.Doctor;
 import com.example.project.model.Medication;
@@ -142,7 +143,7 @@ public class ConsultController {
     @GetMapping("/{id}/edit")
     public String editConsult(@PathVariable("id") String consultId, Model model) {
         if (userService.isDoctor() && !consultService.isMyConsult(Long.valueOf(consultId))) {
-            return "access_denied";
+            throw new ForbiddenException();
         }
         var doctors = doctorService.getAllDoctors();
         var patients = patientService.getAllPatients();
@@ -218,7 +219,7 @@ public class ConsultController {
         return REDIRECT + ALL_CONSULTS;
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}/delete")
     public String deleteConsult(@PathVariable Long id) {
         consultService.deleteConsultById(id);
         return REDIRECT + ALL_CONSULTS;

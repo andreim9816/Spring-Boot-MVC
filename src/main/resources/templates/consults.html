@@ -44,8 +44,8 @@
                 </a>
             </td>
             <td sec:authorize="hasRole('ADMIN')">
-                <form th:object="${consult}" th:action="@{/consults/{id}(id=${consult.id})}"
-                      th:method="delete">
+                <form th:object="${consult}" th:action="@{/consults/{id}/delete(id=${consult.id})}"
+                      th:method="GET">
                     <button class="btn btn-secondary">Delete</button>
                 </form>
             </td>

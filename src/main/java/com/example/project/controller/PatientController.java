@@ -120,7 +120,7 @@ public class PatientController {
         return REDIRECT + ALL_PATIENTS;
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/{id}/delete")
     public String deletePatient(@PathVariable Long id) {
         patientService.deletePatientById(id);
         return REDIRECT + ALL_PATIENTS;

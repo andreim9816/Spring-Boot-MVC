@@ -48,23 +48,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/login.do*").permitAll()
 
                 .antMatchers("/departments/new", "/departments/{^[0-9]+}/edit").hasRole(ADMIN)
+                .antMatchers("/departments/{^[0-9]+}/delete").hasRole(ADMIN)
                 .antMatchers("/departments/{^[0-9]+}").permitAll()
                 .antMatchers("/departments").permitAll()
 
                 .antMatchers("/patients/new", "/patients/{^[0-9]+}/edit").hasRole(ADMIN)
+                .antMatchers("/patients/{^[0-9]+}/delete").hasRole(ADMIN)
                 .antMatchers("/patients/{^[0-9]+}").hasAnyRole(ADMIN, DOCTOR)
                 .antMatchers("/patients").hasAnyRole(ADMIN, DOCTOR)
 
                 .antMatchers("/doctors/{^[0-9]+}/edit").hasAnyRole(DOCTOR, ADMIN)
                 .antMatchers("/doctors/my-profile").hasRole(DOCTOR)
+                .antMatchers("/doctors/{^[0-9]+}/delete").hasRole(ADMIN)
                 .antMatchers("/doctors/{^[0-9]+}").permitAll()
                 .antMatchers("/doctors").permitAll()
 
                 .antMatchers("/medications/new", "/medications/{^[0-9]+}/edit").hasRole(ADMIN)
+                .antMatchers("/medications/{^[0-9]+}/delete").hasRole(ADMIN)
                 .antMatchers("/medications/{^[0-9]+}").permitAll()
                 .antMatchers("/medications").permitAll()
 
                 .antMatchers("/consults/{^[0-9]+}/edit").hasAnyRole(DOCTOR, ADMIN)
+                .antMatchers("/consults/{^[0-9]+}/delete").hasRole(ADMIN)
                 .antMatchers("/consults/new").hasAnyRole(DOCTOR, ADMIN)
                 .antMatchers("/consults/{^[0-9]+}").hasAnyRole(DOCTOR, ADMIN)
                 .antMatchers("/consults/my-consults").hasRole(DOCTOR)
