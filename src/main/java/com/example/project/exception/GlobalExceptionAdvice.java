@@ -15,7 +15,7 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handle(EntityNotFoundException e) {
-        ModelAndView modelAndView = new ModelAndView("error_not_found");
+        ModelAndView modelAndView = new ModelAndView("err_not_found");
 
         var error = ErrorBody.builder()
                 .message(String.format("%s with ID %s doesn't exist!", e.getEntityType(), e.getEntityId()))
@@ -28,6 +28,22 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(ForbiddenException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ModelAndView handle(ForbiddenException e) {
-        return new ModelAndView("access_denied");
+        return new ModelAndView("err_access_denied");
+    }
+
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handle(NumberFormatException exception) {
+        ModelAndView modelAndView = new ModelAndView("err_number_format");
+        modelAndView.addObject("message", exception.getMessage());
+        return modelAndView;
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView handle(Exception exception) {
+        ModelAndView modelAndView = new ModelAndView("err_default");
+        modelAndView.addObject("message", DEFAULT_MESSAGE);
+        return modelAndView;
     }
 }

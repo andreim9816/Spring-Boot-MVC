@@ -116,6 +116,6 @@ public class HomeController {
 
     @GetMapping("/" + ACCESS_DENIED)
     public String accessDenied() {
-        return "access_denied";
+        return "err_access_denied";
     }
 }

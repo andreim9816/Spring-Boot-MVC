@@ -16,14 +16,14 @@
             <div class="pannel-group">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title" th:text="'Error! Number format error!'">Resource type</h1>
+                        <h1 class="panel-title" th:text="'Error!'">Resource type</h1>
                     </div>
                     <br>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <label th:for="exception">Error</label>
-                                <p th:text="${exception.message}">description</p>
+                                <label th:for="message">Error</label>
+                                <p th:text="${message}">description</p>
                             </div>
                         </div>
                     </div>
